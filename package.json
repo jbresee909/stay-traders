@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "cd server && npm start",
+    "dev": "cd server && npm run dev",
     "react-dev": "cd client && npm start",
     "test": "cd server && npm test",
     "preinstall": "cd server && npm install",
@@ -11,6 +12,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "nodemon": "^2.0.13"
   }
 }
