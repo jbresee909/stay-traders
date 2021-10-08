@@ -1,16 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 function Login() {
     const API_URL = process.env.REACT_APP_API;
 
+    const [loginUsername, setLoginUsername] = useState('email')
+    const [loginPassword, setLoginPassword] = useState('password')
+    const login = () => {
+        axios({
+            method: 'POST',
+            url: API_URL + '/users/login',
+            withCredentials: true,
+            data: {
+                username: loginUsername,
+                password: loginPassword
+            }
+        })
+    }
     return (
         <div>
-            <form method='POST' action={API_URL + '/users/add'}>
-                <input placeholder='Email' name='email'></input>
-                <input placeholder='Password' name='password'></input>
-                <input placeholder='Verfiy Password' name='verify-passsword'></input>
-                <button type='submit'>Submit</button>
+            <form>
+                <input placeholder={loginUsername} onChange={(e) => setLoginUsername(e.target.value)}></input>
+                <input placeholder={loginPassword} onChange={(e) => setLoginPassword(e.target.value)}></input>
+                <button onClick={login}>Submit</button>
             </form>
+            <a href='/Register'>Register</a>
         </div>
     );
 }

@@ -1,6 +1,9 @@
 const appName = "Stay Traders";
 const port = process.env.PORT || 8080;
 
+// Set Environment variables config
+require('dotenv').config()
+
 // connect to database
 const mongoose = require('mongoose');
 
@@ -23,9 +26,6 @@ let db = mongoose.connection;
 // Check connection
 db.once('open', function () {
     console.log('Connected to mongodb!')
-
-    // export db connection
-    exports.db = db;
 
     // create server and run
     const createServer = require("./server");

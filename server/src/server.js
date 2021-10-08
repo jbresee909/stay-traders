@@ -5,6 +5,9 @@ const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const passport = require("passport");
 
 
 /**** Configuration ****/
@@ -14,8 +17,27 @@ function createServer() {
   const routes = require("./routes/users")();
 
   app.use(morgan('combined'));
-  app.use(cors());
+  app.use(express.json());
+  app.use(
+    cors({
+      origin: "http://localhost:3000", // <-- location of the react app were connecting to
+      credentials: true,
+    })
+  );
   app.use(express.static(path.resolve('..', 'client', 'build')));
+  app.use(express.urlencoded({ extended: true }));
+  app.use(session({
+    secret: process.env.SESSION_SECRET_KEY,
+    resave: true,
+    saveUninitialized: true
+  }));
+  app.use(cookieParser(process.env.SESSION_SECRET_KEY));
+  app.use(passport.initialize());
+  app.use(passport.session());
+  require("../passportConfig")(passport);
+
+
+
 
   /**** Add routes ****/
   app.use("/api/users", routes);
