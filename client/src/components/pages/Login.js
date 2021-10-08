@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function Login() {
-    const API_URL = process.env.REACT_APP_API;
 
     const [loginUsername, setLoginUsername] = useState('email')
     const [loginPassword, setLoginPassword] = useState('password')
     const login = () => {
         axios({
             method: 'POST',
-            url: API_URL + '/users/login',
+            url: '/api/users/login',
             withCredentials: true,
             data: {
                 username: loginUsername,

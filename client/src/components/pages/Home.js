@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function Home() {
-    const API_URL = process.env.REACT_APP_API;
-
     const [currentUser, setCurrentUser] = useState('')
     const getCurrentUser = () => {
         axios({
             method: 'GET',
-            url: API_URL + '/users/user',
+            url: '/api/users/user',
             withCredentials: true
-        })
+        }).then((data) => setCurrentUser(data.data.firstName)).catch((err) => console.log(err))
     }
     return (
         <div>

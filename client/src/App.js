@@ -12,7 +12,6 @@ import Home from './components/pages/Home'
 import Login from './components/pages/Login'
 import Register from './components/pages/Register'
 
-const API_URL = process.env.REACT_APP_API;
 
 
 function App() {
@@ -20,7 +19,7 @@ function App() {
 
   useEffect(() => {
     async function getData() {
-      const url = `${API_URL}/users/hello`;
+      const url = `/api/users/hello`;
 
       try {
         const response = await fetch(url);
