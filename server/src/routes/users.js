@@ -5,7 +5,7 @@ module.exports = () => {
   const bcrypt = require('bcrypt');
   const passport = require('passport');
 
-  /**** Routes ****/
+  /**** Routes *****/
   router.get('/hello', async (req, res) => {
     res.json({ msg: "Hello, world!" });
   });
