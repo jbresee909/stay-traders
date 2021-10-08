@@ -15,22 +15,7 @@ import Register from './components/pages/Register'
 
 
 function App() {
-  const [data, setData] = useState("No data :(");
 
-  useEffect(() => {
-    async function getData() {
-      const url = `/api/users/hello`;
-
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        setData(data.msg);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    getData();
-  }, []);
 
   return (
     <Router>
@@ -50,7 +35,6 @@ function App() {
         </nav>
         <>
           <h1>MERN App!</h1>
-          <p>Data from server: {data}</p>
         </>
 
         {/* A <Switch> looks through its children <Route>s and
