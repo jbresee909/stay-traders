@@ -8,7 +8,7 @@ function Login() {
     const login = () => {
         axios({
             method: 'POST',
-            url: '/api/users/login',
+            url: 'https://staytraders.herokuapp.com/api/users/login',
             withCredentials: true,
             data: {
                 username: loginUsername,
