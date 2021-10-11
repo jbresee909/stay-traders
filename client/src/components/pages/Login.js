@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function Login() {
+    const API_URL = window.location.href.includes('localhost') ? 'http://localhost:8080' : window.location.href
 
     const [loginUsername, setLoginUsername] = useState('email')
     const [loginPassword, setLoginPassword] = useState('password')
     const login = () => {
         axios({
             method: 'POST',
-            url: 'http://localhost:8080/api/users/login',
+            url: 'api/users/login',
             withCredentials: true,
             data: {
                 username: loginUsername,

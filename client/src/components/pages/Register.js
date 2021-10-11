@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function Register() {
+    const API_URL = window.location.href.includes('localhost') ? 'http://localhost:8080' : window.location.href
 
     // Set state variables
     const [registerFirstName, setRegisterFirstName] = useState('first name');
@@ -10,7 +11,7 @@ function Register() {
     const [registerPassword, setRegisterPassword] = useState('password');
     const [registerVeriftyPassword, setRegisterVerifyPassword] = useState('verify password');
     const register = () => {
-        axios.post('http://localhost:8080/api/users/register', {
+        axios.post('api/users/register', {
             firstName: registerFirstName,
             lastName: registerLastName,
             username: registerEmail,
