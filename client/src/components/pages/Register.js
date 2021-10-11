@@ -10,7 +10,7 @@ function Register() {
     const [registerPassword, setRegisterPassword] = useState('password');
     const [registerVeriftyPassword, setRegisterVerifyPassword] = useState('verify password');
     const register = () => {
-        axios.post('/api/users/register', {
+        axios.post('http://localhost:8080/api/users/register', {
             firstName: registerFirstName,
             lastName: registerLastName,
             username: registerEmail,
