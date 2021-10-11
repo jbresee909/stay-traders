@@ -9,7 +9,7 @@ function Home() {
     const getCurrentUser = () => {
         axios({
             method: 'GET',
-            url: API_URL + 'api/users/user',
+            url: process.env.REACT_APP_API + '/users/user',
             withCredentials: true
         }).then((data) => {
             console.log(data)
@@ -18,7 +18,7 @@ function Home() {
     }
 
     useEffect(() => {
-        axios.get(API_URL + 'api/users/hello', { withCredentials: true })
+        axios.get(process.env.REACT_APP_API + '/users/hello', { withCredentials: true })
             .then((res) => setMessage(res.data.msg))
             .catch((err) => console.log(err))
     })
