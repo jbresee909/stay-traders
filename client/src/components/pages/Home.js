@@ -8,7 +8,7 @@ function Home() {
     const getCurrentUser = () => {
         axios({
             method: 'GET',
-            url: 'http://localhost:8080/api/users/user',
+            url: '/api/users/user',
             withCredentials: true
         }).then((data) => {
             console.log(data)
@@ -17,7 +17,7 @@ function Home() {
     }
 
     useEffect(() => {
-        axios.get('https://staytraders.herokuapp.com/api/users/hello', { withCredentials: true })
+        axios.get('/api/users/hello', { withCredentials: true })
             .then((res) => setMessage(res.data.msg))
             .catch((err) => console.log(err))
     })
