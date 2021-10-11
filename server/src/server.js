@@ -14,7 +14,7 @@ const passport = require("passport");
 const mongoose = require('mongoose');
 
 // connect to database
-const uri = "mongodb+srv://justinbresee:37Rigger909@staytraders.y99hr.mongodb.net/StayTraders?retryWrites=true&w=majority";
+const uri = process.env.MONGO_URI;
 try {
   // Connect to the MongoDB cluster
   mongoose.connect(
