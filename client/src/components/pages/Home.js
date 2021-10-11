@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function Home() {
-    const API_URL = window.location.href.includes('localhost') ? 'http://localhost:8080/api' : null
+    const API_URL = window.location.href.includes('localhost') ? 'http://localhost:8080' : window.location.href
 
     console.log(API_URL);
 
@@ -11,7 +11,7 @@ function Home() {
     const getCurrentUser = () => {
         axios({
             method: 'GET',
-            url: API_URL + '/users/user',
+            url: API_URL + '/api/users/user',
             withCredentials: true
         }).then((data) => {
             console.log(data)
@@ -20,7 +20,7 @@ function Home() {
     }
 
     useEffect(() => {
-        axios.get(API_URL + '/users/hello')
+        axios.get(API_URL + '/api/users/hello')
             .then((res) => setMessage(res.data.msg))
             .catch((err) => console.log(err))
     })
