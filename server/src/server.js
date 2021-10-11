@@ -10,6 +10,29 @@ const session = require('express-session');
 const passport = require("passport");
 
 
+// connect to database
+const mongoose = require('mongoose');
+
+// connect to database
+const uri = "mongodb+srv://justinbresee:37Rigger909@staytraders.y99hr.mongodb.net/StayTraders?retryWrites=true&w=majority";
+try {
+  // Connect to the MongoDB cluster
+  mongoose.connect(
+    uri,
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  );
+
+} catch (e) {
+  console.log("Unable to connect to database.")
+  console.log(e);
+}
+
+let db = mongoose.connection;
+
+db.on('open', () => {
+  console.log('connected to mongo db')
+})
+
 /**** Configuration ****/
 const app = express();
 
@@ -18,12 +41,7 @@ function createServer() {
 
   app.use(morgan('combined'));
   app.use(express.json());
-  app.use(
-    cors({
-      origin: "http://localhost:3000", // <-- location of the react app were connecting to
-      credentials: true,
-    })
-  );
+  app.use(cors());
   app.use(express.static(path.resolve('..', 'client', 'build')));
   app.use(express.urlencoded({ extended: true }));
   app.use(session({

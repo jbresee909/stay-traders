@@ -17,7 +17,7 @@ function Home() {
     }
 
     useEffect(() => {
-        axios.get('https://staytraders.herokuapp.com/api/users/hello')
+        axios.get('https://staytraders.herokuapp.com/api/users/hello', { withCredentials: true })
             .then((res) => setMessage(res.data.msg))
             .catch((err) => console.log(err))
     })
