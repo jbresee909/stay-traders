@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function Home() {
+    const API_URL = window.location.href.includes('localhost') ? 'http://localhost:8080' : window.location.href
 
     const [currentUser, setCurrentUser] = useState('')
     const [message, setMessage] = useState('')
     const getCurrentUser = () => {
         axios({
             method: 'GET',
-            url: '/api/users/user',
+            url: API_URL + '/api/users/user',
             withCredentials: true
         }).then((data) => {
             console.log(data)
@@ -17,7 +18,7 @@ function Home() {
     }
 
     useEffect(() => {
-        axios.get('/api/users/hello', { withCredentials: true })
+        axios.get(API_URL + '/api/users/hello', { withCredentials: true })
             .then((res) => setMessage(res.data.msg))
             .catch((err) => console.log(err))
     })
