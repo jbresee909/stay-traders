@@ -14,11 +14,11 @@ module.exports = () => {
   router.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user) => {
       if (err) throw err;
-      if (!user) res.send("No User Exists");
+      if (!user) res.send({ error: 'No user found', success: null });
       else {
         req.logIn(user, (err) => {
           if (err) throw err;
-          res.send("Successfully Authenticated");
+          res.send({ error: null, success: 'User logged in!', firstName: user.firstName });
         });
       }
     })(req, res, next);
@@ -42,6 +42,12 @@ module.exports = () => {
       }
     });
   });
+
+  router.post('/logout', (req, res) => {
+    req.logOut();
+    res.send('User Logged Out')
+  })
+
   router.get("/user", (req, res) => {
     console.log(req.user)
     res.send(req.user)

@@ -1,35 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function Home() {
-    const API_URL = window.location.href.includes('localhost') ? 'http://localhost:8080' : window.location.href
-
-    const [currentUser, setCurrentUser] = useState('')
+function Home(props) {
     const [message, setMessage] = useState('')
-    const getCurrentUser = () => {
-        axios({
-            method: 'GET',
-            url: process.env.REACT_APP_API + '/users/user',
-            withCredentials: true
-        }).then((data) => {
-            console.log(data)
-            setCurrentUser(data.data.firstName)
-        }).catch((err) => console.log(err))
+
+    const logOut = () => {
+        axios.post(process.env.REACT_APP_API + '/users/logout', { withCredentials: true })
+            .then(() => {
+                console.log('user logged out')
+                props.setCurrentUserFirstName('')
+            })
+            .catch((err) => console.log(err))
     }
 
     useEffect(() => {
+        // Frontend check to check database connection
         axios.get(process.env.REACT_APP_API + '/users/hello', { withCredentials: true })
             .then((res) => setMessage(res.data.msg))
             .catch((err) => console.log(err))
     })
 
-    console.log(window.location.href);
-
     return (
         <div>
-            <h1>Welcome, {currentUser}</h1>
+            <h1>Welcome, {props.currentUserFirstName}</h1>
             <p>From the database: {message}</p>
-            <button onClick={getCurrentUser}>Get Current User</button>
+            <button onClick={logOut}>Sign Out</button>
         </div>);
 }
 
