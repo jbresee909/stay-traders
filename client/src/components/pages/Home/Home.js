@@ -6,8 +6,8 @@ function Home(props) {
 
     const logOut = () => {
         axios.post(process.env.REACT_APP_API + '/users/logout', { withCredentials: true })
-            .then(() => {
-                console.log('user logged out')
+            .then((res) => {
+                console.log(res)
                 props.setCurrentUserFirstName('')
             })
             .catch((err) => console.log(err))

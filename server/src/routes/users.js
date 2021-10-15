@@ -45,7 +45,10 @@ module.exports = () => {
 
   router.post('/logout', (req, res) => {
     req.logOut();
-    res.send('User Logged Out')
+    req.session.destroy((err) => {
+      if (err) res.send(err);
+      else res.send('User logged out!')
+    })
   })
 
   router.get("/user", (req, res) => {
