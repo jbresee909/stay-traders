@@ -17,7 +17,7 @@ import Register from './components/pages/Register/Register'
 
 
 function App() {
-  const [currentUserFirstName, setCurrentUserFirstName] = useState('')
+  const [currentUserFirstName, setCurrentUserFirstName] = useState(null)
 
   useEffect(() => {
     // Get the user that is currently logged in    
@@ -38,8 +38,8 @@ function App() {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="#features">Features</Nav.Link>
-              <Nav.Link href="#pricing">Pricing</Nav.Link>
+              <Nav.Link href="/login">Login</Nav.Link>
+              <Nav.Link href="/register">Register</Nav.Link>
             </Nav>
             <Nav>
               <NavDropdown title={currentUserFirstName} id="collasible-nav-dropdown">
