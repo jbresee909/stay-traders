@@ -42,7 +42,7 @@ function App() {
               <Nav.Link href="/register">Register</Nav.Link>
             </Nav>
             <Nav>
-              <NavDropdown title={currentUserFirstName} id="collasible-nav-dropdown">
+              <NavDropdown title={currentUserFirstName === "" ? "Menu" : currentUserFirstName} id="collasible-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
