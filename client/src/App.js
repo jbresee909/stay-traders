@@ -17,7 +17,7 @@ import Register from './components/pages/Register/Register'
 
 
 function App() {
-  const [currentUserFirstName, setCurrentUserFirstName] = useState(null)
+  const [currentUserFirstName, setCurrentUserFirstName] = useState('');
 
   useEffect(() => {
     // Get the user that is currently logged in    
@@ -55,19 +55,6 @@ function App() {
         </Container>
       </Navbar>
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/register">Register</Link>
-            </li>
-          </ul>
-        </nav>
 
         {/* A <Switch> looks through its children <Route>s and
           renders the first one that matches the current URL. */}
@@ -79,7 +66,7 @@ function App() {
             {currentUserFirstName === '' ? <Register /> : <Redirect to="/" />}
           </Route>
           <Route path="/">
-            {currentUserFirstName === '' ? <Redirect to="/login" /> : <Home currentUserFirstName={currentUserFirstName} setCurrentUserFirstName={setCurrentUserFirstName} />}
+            {currentUserFirstName !== '' ? <Home currentUserFirstName={currentUserFirstName} setCurrentUserFirstName={setCurrentUserFirstName} /> : <Redirect to="/login" />}
           </Route>
         </Switch>
       </div>

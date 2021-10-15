@@ -4,7 +4,7 @@ import axios from 'axios';
 function Home(props) {
     const [message, setMessage] = useState('')
 
-    const logOut = () => {
+    const handleLogOut = () => {
         axios.post(process.env.REACT_APP_API + '/users/logout', { withCredentials: true })
             .then((res) => {
                 console.log(res)
@@ -24,7 +24,7 @@ function Home(props) {
         <div>
             <h1>Welcome, {props.currentUserFirstName}</h1>
             <p>From the database: {message}</p>
-            <button onClick={logOut}>Sign Out</button>
+            <button onClick={handleLogOut}>Sign Out</button>
         </div>);
 }
 
