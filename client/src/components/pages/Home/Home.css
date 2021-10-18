@@ -1,0 +1,35 @@
+#home-page {
+    background-image: url("https://res.cloudinary.com/justin-bresee/image/upload/v1634579491/StayTraders/pexels-binyamin-mellish-106399_tbjudh.jpg");
+    height: 93vh;
+    background-size:cover;
+    background-position: center;
+    color: white;
+}
+
+#home-hero {
+    background-color: black;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#home-hero div {
+    text-align: center;
+    text-decoration: none;
+    color: white
+}
+
+#home-hero h1 {
+    margin-bottom: 30px;
+}
+
+#home-hero a{
+    text-decoration: none;
+    color: #333;
+    padding: 12px 20px;
+    background-color: var(--secondary);
+    border-radius: 50px;
+}
+
