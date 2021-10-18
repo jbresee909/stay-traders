@@ -1,0 +1,8 @@
+.dropdown-menu a {
+    text-decoration: none;
+    background-color: inherit
+}
+
+.dropdown-item:active {
+    background-color: white;
+}

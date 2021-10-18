@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
 import axios from 'axios';
 import { Card, Form, Button } from 'react-bootstrap';
 import FloatingLabel from "react-bootstrap-floating-label";
@@ -70,7 +71,7 @@ function Register() {
                     </FloatingLabel>
                     <Button className="mt-2 mb-2" type="submit" variant="primary" onClick={(e) => handleRegistration(e)}>Register</Button>
                 </Form>
-                <p>Already have an account? <a href='/Register'>Login</a></p>
+                <p>Already have an account? <Link to="/login">Login</Link></p>
             </Card>
         </div>
     );

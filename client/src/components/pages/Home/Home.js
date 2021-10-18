@@ -4,15 +4,6 @@ import axios from 'axios';
 function Home(props) {
     const [message, setMessage] = useState('')
 
-    const handleLogOut = () => {
-        axios.post(process.env.REACT_APP_API + '/users/logout', { withCredentials: true })
-            .then((res) => {
-                console.log(res)
-                props.setCurrentUserFirstName('')
-            })
-            .catch((err) => console.log(err))
-    }
-
     useEffect(() => {
         // Frontend check to check database connection
         axios.get(process.env.REACT_APP_API + '/users/hello', { withCredentials: true })
@@ -24,7 +15,6 @@ function Home(props) {
         <div>
             <h1>Welcome, {props.currentUserFirstName}</h1>
             <p>From the database: {message}</p>
-            <button onClick={handleLogOut}>Sign Out</button>
         </div>);
 }
 

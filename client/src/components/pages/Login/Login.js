@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
 import axios from 'axios';
 import { Form, Alert, Button, Card } from 'react-bootstrap';
 import FloatingLabel from "react-bootstrap-floating-label";
 import "./Login.css"
 
 function Login(props) {
-    const [message, setMessage] = useState('')
+    const [message, setMessage] = useState(null)
     const [loginUsername, setLoginUsername] = useState('email')
     const [loginPassword, setLoginPassword] = useState('password')
     const handleLogin = (e) => {
@@ -24,7 +25,7 @@ function Login(props) {
         <Card className="container p-3">
             <h2>Login</h2>
             <Form>
-                <Alert variant='danger' style={message === '' ? { display: "none" } : { display: 'block' }}>
+                <Alert variant='danger' style={!message ? { display: "none" } : { display: 'block' }}>
                     {message}
                 </Alert>
                 <FloatingLabel
@@ -45,7 +46,7 @@ function Login(props) {
                 </FloatingLabel>
                 <Button className="mt-2 mb-2" type="submit" variant="primary" onClick={(e) => handleLogin(e)}>Login</Button>
             </Form>
-            <p>Don't have an account? <a href='/Register'>Register</a></p>
+            <p>Don't have an account? <Link to="/register">Register</Link> </p>
         </Card>
     );
 }
