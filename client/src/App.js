@@ -61,7 +61,7 @@ function App() {
             {!currentUserFirstName ? <Login setCurrentUserFirstName={setCurrentUserFirstName} /> : <Redirect to="/" />}
           </Route>
           <Route path="/register">
-            {!currentUserFirstName ? <Register /> : <Redirect to="/" />}
+            {!currentUserFirstName ? <Register setCurrentUserFirstName={setCurrentUserFirstName} /> : <Redirect to="/" />}
           </Route>
           <Route path="/">
             {<Home currentUserFirstName={currentUserFirstName} setCurrentUserFirstName={setCurrentUserFirstName} />}

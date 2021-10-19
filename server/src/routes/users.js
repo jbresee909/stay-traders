@@ -25,9 +25,9 @@ module.exports = () => {
   });
 
   router.post("/register", (req, res) => {
-    User.findOne({ username: req.body.username }, async (err, doc) => {
+    User.findOne({ username: req.body.username.toLowerCase() }, async (err, doc) => {
       if (err) throw err;
-      if (doc) res.send("User Already Exists");
+      if (doc) res.send({ error: "User with that email already exists.", success: null });
       if (!doc) {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
@@ -37,8 +37,8 @@ module.exports = () => {
           username: req.body.username,
           password: hashedPassword,
         });
-        await newUser.save().then(() => console.log('New User Added')).catch((err) => console.log(err));
-        res.send("User Created");
+        await newUser.save().then(() => res.send({ success: "New user created!", firstName: req.body.firstName, error: null })).catch((err) => console.log(err));
+
       }
     });
   });
