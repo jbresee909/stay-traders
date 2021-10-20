@@ -37,16 +37,17 @@ db.on('open', () => {
 const app = express();
 
 function createServer() {
-  const routes = require("./routes/users")();
+  const userRoutes = require("./routes/users")();
+  const listingRoutes = require("./routes/listings")();
 
   app.use(morgan('combined'));
-  app.use(express.json());
+  app.use(express.json({ limit: '50mb' }));
   app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true
   }));
   app.use(express.static(path.resolve('..', 'client', 'build')));
-  app.use(express.urlencoded({ extended: true }));
+  app.use(express.urlencoded({ limit: '50mb', extended: true }));
   app.use(session({
     secret: process.env.SESSION_SECRET_KEY,
     resave: true,
@@ -61,7 +62,8 @@ function createServer() {
 
 
   /**** Add routes ****/
-  app.use("/api/users", routes);
+  app.use("/api/users", userRoutes);
+  app.use("/api/listings", listingRoutes);
 
   // "Redirect" all non-API GET requests to React's entry point (index.html)
   app.get('*', (req, res) =>

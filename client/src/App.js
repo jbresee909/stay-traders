@@ -13,6 +13,7 @@ import "./styles/app.css";
 import Home from './components/pages/Home/Home'
 import Login from './components/pages/Login/Login'
 import Register from './components/pages/Register/Register'
+import Listings from './components/pages/Listings/Listings'
 
 // Import Components
 import NavMenu from './components/NavMenu/NavMenu';
@@ -62,6 +63,9 @@ function App() {
           </Route>
           <Route path="/register">
             {!currentUserFirstName ? <Register setCurrentUserFirstName={setCurrentUserFirstName} /> : <Redirect to="/" />}
+          </Route>
+          <Route path="/listings">
+            <Listings />
           </Route>
           <Route path="/">
             {<Home currentUserFirstName={currentUserFirstName} setCurrentUserFirstName={setCurrentUserFirstName} />}

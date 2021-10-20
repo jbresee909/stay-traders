@@ -20,7 +20,7 @@ function NavMenu(props) {
                 <NavDropdown.Item >Messages</NavDropdown.Item>
                 <NavDropdown.Item >Favorites</NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item >Your Listings</NavDropdown.Item>
+                <Link to="/listings"><NavDropdown.Item href="/listings" className="nav-menu-link">Your Listings</NavDropdown.Item> </Link>
                 <NavDropdown.Item >Account</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={handleLogout} style={{ color: "red" }}> Logout</NavDropdown.Item>

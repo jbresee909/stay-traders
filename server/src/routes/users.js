@@ -5,11 +5,6 @@ module.exports = () => {
   const bcrypt = require('bcrypt');
   const passport = require('passport');
 
-  /**** Routes *****/
-  router.get('/hello', async (req, res) => {
-    res.json({ msg: "Hello, world!" });
-  });
-
   // Routes
   router.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user) => {
