@@ -39,7 +39,8 @@ function AddNewListing(props) {
 
     const uploadImage = async (base64EncodedImage) => {
         axios.post(process.env.REACT_APP_API + '/listings/add', { data: base64EncodedImage }, { withCredentials: true })
-            .then(() => {
+            .then((res) => {
+                console.log(res.data)
                 setFileInputState('');
                 setPreviewSource('');
                 setSuccessMsg('Image uploaded successfully');

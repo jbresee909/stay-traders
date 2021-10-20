@@ -2,7 +2,7 @@ let mongoose = require('mongoose');
 
 // Listing Schema
 let listingSchema = mongoose.Schema({
-    image: {
+    imageURL: {
         type: String
     }
 });
