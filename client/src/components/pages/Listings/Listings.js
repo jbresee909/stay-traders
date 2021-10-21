@@ -4,11 +4,14 @@ import axios from "axios";
 
 function AddNewListing(props) {
     const [currentFormStep, setCurrentFormStep] = useState(1);
-    const [fileInputState, setFileInputState] = useState('');
-    const [previewSource, setPreviewSource] = useState('');
+    const [fileInputState, setFileInputState] = useState();
+    const [previewSource, setPreviewSource] = useState();
     const [selectedFile, setSelectedFile] = useState();
-    const [successMsg, setSuccessMsg] = useState('');
-    const [errMsg, setErrMsg] = useState('');
+    const [successMsg, setSuccessMsg] = useState();
+    const [errMsg, setErrMsg] = useState();
+    const [listingTitle, setListingTitle] = useState();
+    const [listingDescription, setListingDescription] = useState();
+
 
     const handleFileInputChange = (e) => {
         const file = e.target.files[0];
@@ -25,13 +28,13 @@ function AddNewListing(props) {
         };
     };
 
-    const handleSubmitFile = (e) => {
+    const handleSubmitListing = (e) => {
         e.preventDefault();
         if (!selectedFile) return;
         const reader = new FileReader();
         reader.readAsDataURL(selectedFile);
         reader.onloadend = () => {
-            uploadImage(reader.result);
+            addListing(reader.result);
         };
         reader.onerror = () => {
             console.error('AHHHHHHHH!!');
@@ -39,8 +42,8 @@ function AddNewListing(props) {
         };
     };
 
-    const uploadImage = async (base64EncodedImage) => {
-        axios.post(process.env.REACT_APP_API + '/listings/add', { data: base64EncodedImage }, { withCredentials: true })
+    const addListing = async (base64EncodedImage) => {
+        axios.post(process.env.REACT_APP_API + '/listings/add', { data: { image: base64EncodedImage, title: listingTitle, description: listingDescription } }, { withCredentials: true })
             .then((res) => {
                 console.log(res.data)
                 setFileInputState('');
@@ -54,9 +57,9 @@ function AddNewListing(props) {
         switch (step) {
             case 1:
                 return (
-                    <Form onSubmit={handleSubmitFile}>
-                        <Alert>{errMsg} </Alert>
-                        <Alert>{successMsg} </Alert>
+                    <Form>
+                        <Alert variant="danger" style={!errMsg ? { display: "none" } : { display: 'block' }}>{errMsg}</Alert>
+                        <Alert variant="success" style={!successMsg ? { display: "none" } : { display: 'block' }}>{successMsg} </Alert>
                         {previewSource && (
                             <img
                                 src={previewSource}
@@ -74,14 +77,26 @@ function AddNewListing(props) {
                                 onChange={handleFileInputChange}
                                 value={fileInputState} />
                         </Form.Group>
-                        <Button type="submit">Submit</Button>
                     </Form>
                 )
             case 2:
                 return (
-                    <h1>Step 2</h1>
+                    <Form onSubmit={handleSubmitListing}>
+                        {listingTitle}
+                        {listingDescription}
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                            <Form.Label>Listing Title</Form.Label>
+                            <Form.Control onChange={(e) => setListingTitle(e.target.value)} />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                            <Form.Label>Brief Description</Form.Label>
+                            <Form.Control as="textarea" rows={3} onChange={(e) => setListingDescription(e.target.value)} />
+                        </Form.Group>
+                        <Button type="submit">Submit</Button>
+                    </Form>
                 )
             default:
+                setCurrentFormStep(2);
         }
     }
 
@@ -109,7 +124,6 @@ function AddNewListing(props) {
                     let nextStep = currentFormStep + 1
                     setCurrentFormStep(nextStep);
                 }}>Next</Button>
-                <Button onClick={props.onHide}>Close</Button>
             </Modal.Footer>
         </Modal>
     );

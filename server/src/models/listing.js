@@ -4,6 +4,12 @@ let mongoose = require('mongoose');
 let listingSchema = mongoose.Schema({
     imageURL: {
         type: String
+    },
+    title: {
+        type: String
+    },
+    description: {
+        type: String
     }
 });
 
