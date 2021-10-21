@@ -1,23 +1,23 @@
 import React, { useState } from "react"
-import { Alert, Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form, Toast } from "react-bootstrap";
 import axios from "axios";
+import "./Listings.css";
 
 function AddNewListing(props) {
     const [currentFormStep, setCurrentFormStep] = useState(1);
-    const [fileInputState, setFileInputState] = useState();
     const [previewSource, setPreviewSource] = useState();
     const [selectedFile, setSelectedFile] = useState();
     const [successMsg, setSuccessMsg] = useState();
     const [errMsg, setErrMsg] = useState();
     const [listingTitle, setListingTitle] = useState();
     const [listingDescription, setListingDescription] = useState();
+    const [showMessageToast, setShowMessageToast] = useState(false);
 
 
     const handleFileInputChange = (e) => {
         const file = e.target.files[0];
         previewFile(file);
         setSelectedFile(file);
-        setFileInputState(e.target.value);
     };
 
     const previewFile = (file) => {
@@ -30,15 +30,17 @@ function AddNewListing(props) {
 
     const handleSubmitListing = (e) => {
         e.preventDefault();
+
         if (!selectedFile) return;
+        setCurrentFormStep(3); // set loader
         const reader = new FileReader();
         reader.readAsDataURL(selectedFile);
         reader.onloadend = () => {
             addListing(reader.result);
         };
         reader.onerror = () => {
-            console.error('AHHHHHHHH!!');
-            setErrMsg('something went wrong!');
+            console.error('Reader unable to upload selected image.');
+            setErrMsg('unable to upload image!');
         };
     };
 
@@ -46,9 +48,15 @@ function AddNewListing(props) {
         axios.post(process.env.REACT_APP_API + '/listings/add', { data: { image: base64EncodedImage, title: listingTitle, description: listingDescription } }, { withCredentials: true })
             .then((res) => {
                 console.log(res.data)
-                setFileInputState('');
+
+                // reset the form
+                setCurrentFormStep(4);
+                setSuccessMsg('Your listing has been posted!');
+                setShowMessageToast(true);
                 setPreviewSource('');
-                setSuccessMsg('Image uploaded successfully');
+                setCurrentFormStep(1);
+                setListingTitle('');
+                setListingDescription('');
             })
             .catch((err) => console.error(err))
     };
@@ -58,8 +66,6 @@ function AddNewListing(props) {
             case 1:
                 return (
                     <Form>
-                        <Alert variant="danger" style={!errMsg ? { display: "none" } : { display: 'block' }}>{errMsg}</Alert>
-                        <Alert variant="success" style={!successMsg ? { display: "none" } : { display: 'block' }}>{successMsg} </Alert>
                         {previewSource && (
                             <img
                                 src={previewSource}
@@ -68,33 +74,37 @@ function AddNewListing(props) {
                             />
                         )}
                         <Form.Group controlId="formFileMultiple" className="mb-3">
-                            <Form.Label>Multiple files input example</Form.Label>
+                            <Form.Label>Select photos for your listing </Form.Label>
                             <Form.Control
                                 type="file"
                                 multiple
                                 id="fileInput"
                                 name="image"
                                 onChange={handleFileInputChange}
-                                value={fileInputState} />
+                            />
                         </Form.Group>
                     </Form>
                 )
             case 2:
                 return (
                     <Form onSubmit={handleSubmitListing}>
-                        {listingTitle}
-                        {listingDescription}
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        <Form.Group className="mb-3" controlId="ControlInput1">
                             <Form.Label>Listing Title</Form.Label>
-                            <Form.Control onChange={(e) => setListingTitle(e.target.value)} />
+                            <Form.Control onChange={(e) => setListingTitle(e.target.value)} placeholder={listingTitle} />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                        <Form.Group className="mb-3" controlId="ControlTextarea1">
                             <Form.Label>Brief Description</Form.Label>
-                            <Form.Control as="textarea" rows={3} onChange={(e) => setListingDescription(e.target.value)} />
+                            <Form.Control as="textarea" rows={3} onChange={(e) => setListingDescription(e.target.value)} placeHolder={listingDescription} />
                         </Form.Group>
                         <Button type="submit">Submit</Button>
                     </Form>
                 )
+            case 3:
+                return (
+                    <>
+                        <h4>Submitting listing</h4>
+                        <div className="loader"></div>
+                    </>)
             default:
                 setCurrentFormStep(2);
         }
@@ -116,15 +126,29 @@ function AddNewListing(props) {
                 {renderFormStep(currentFormStep)}
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={() => {
-                    let previousStep = currentFormStep - 1
-                    setCurrentFormStep(previousStep);
-                }}>Previous</Button>
-                <Button onClick={() => {
-                    let nextStep = currentFormStep + 1
-                    setCurrentFormStep(nextStep);
-                }}>Next</Button>
+                <Button style={currentFormStep === 1 || currentFormStep > 2 ? { display: "none" } : { display: "block" }}
+                    onClick={() => {
+                        let previousStep = currentFormStep - 1
+                        setCurrentFormStep(previousStep);
+                    }}>Previous</Button>
+                <Button style={currentFormStep >= 2 ? { display: "none" } : { display: "block" }}
+                    onClick={() => {
+                        let nextStep = currentFormStep + 1
+                        setCurrentFormStep(nextStep);
+                    }}>Next</Button>
             </Modal.Footer>
+            <Toast className="toast-message" onClose={() => setShowMessageToast(false)} show={showMessageToast} delay={3000} autohide style={successMsg ? { color: "green" } : { color: "red" }}>
+                <Toast.Header>
+                    <img
+                        src="holder.js/20x20?text=%20"
+                        className="rounded me-2"
+                        alt=""
+                    />
+                    <strong className="me-auto">{successMsg ? 'Congrats!' : 'On no!'}</strong>
+                    <small>Just Now</small>
+                </Toast.Header>
+                <Toast.Body>{successMsg || errMsg}</Toast.Body>
+            </Toast>
         </Modal>
     );
 }
