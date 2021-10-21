@@ -1,13 +1,15 @@
 import React, { useState } from "react"
-import { Alert, Button, Modal } from "react-bootstrap";
+import { Alert, Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
 
 function AddNewListing(props) {
+    const [currentFormStep, setCurrentFormStep] = useState(1);
     const [fileInputState, setFileInputState] = useState('');
     const [previewSource, setPreviewSource] = useState('');
     const [selectedFile, setSelectedFile] = useState();
     const [successMsg, setSuccessMsg] = useState('');
     const [errMsg, setErrMsg] = useState('');
+
     const handleFileInputChange = (e) => {
         const file = e.target.files[0];
         previewFile(file);
@@ -48,6 +50,41 @@ function AddNewListing(props) {
             .catch((err) => console.error(err))
     };
 
+    const renderFormStep = (step) => {
+        switch (step) {
+            case 1:
+                return (
+                    <Form onSubmit={handleSubmitFile}>
+                        <Alert>{errMsg} </Alert>
+                        <Alert>{successMsg} </Alert>
+                        {previewSource && (
+                            <img
+                                src={previewSource}
+                                alt="chosen"
+                                style={{ height: '300px' }}
+                            />
+                        )}
+                        <Form.Group controlId="formFileMultiple" className="mb-3">
+                            <Form.Label>Multiple files input example</Form.Label>
+                            <Form.Control
+                                type="file"
+                                multiple
+                                id="fileInput"
+                                name="image"
+                                onChange={handleFileInputChange}
+                                value={fileInputState} />
+                        </Form.Group>
+                        <Button type="submit">Submit</Button>
+                    </Form>
+                )
+            case 2:
+                return (
+                    <h1>Step 2</h1>
+                )
+            default:
+        }
+    }
+
     return (
         <Modal
             {...props}
@@ -61,33 +98,17 @@ function AddNewListing(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div>
-                    <h1 className="title">Upload an Image</h1>
-                    <Alert>{errMsg} </Alert>
-                    <Alert>{successMsg} </Alert>
-                    <form onSubmit={handleSubmitFile} className="form">
-                        <input
-                            id="fileInput"
-                            type="file"
-                            name="image"
-                            onChange={handleFileInputChange}
-                            value={fileInputState}
-                            className="form-input"
-                        />
-                        <button className="btn" type="submit">
-                            Submit
-                        </button>
-                    </form>
-                    {previewSource && (
-                        <img
-                            src={previewSource}
-                            alt="chosen"
-                            style={{ height: '300px' }}
-                        />
-                    )}
-                </div>
+                {renderFormStep(currentFormStep)}
             </Modal.Body>
             <Modal.Footer>
+                <Button onClick={() => {
+                    let previousStep = currentFormStep - 1
+                    setCurrentFormStep(previousStep);
+                }}>Previous</Button>
+                <Button onClick={() => {
+                    let nextStep = currentFormStep + 1
+                    setCurrentFormStep(nextStep);
+                }}>Next</Button>
                 <Button onClick={props.onHide}>Close</Button>
             </Modal.Footer>
         </Modal>
