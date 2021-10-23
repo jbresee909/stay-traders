@@ -2,6 +2,10 @@ let mongoose = require('mongoose');
 
 // Listing Schema
 let listingSchema = mongoose.Schema({
+    userID: {
+        type: String,
+        required: true
+    },
     imageURL: {
         type: String
     },
@@ -10,6 +14,10 @@ let listingSchema = mongoose.Schema({
     },
     description: {
         type: String
+    },
+    deleted: {
+        type: Boolean,
+        default: false
     }
 });
 

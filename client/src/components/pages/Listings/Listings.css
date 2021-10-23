@@ -15,6 +15,11 @@
 
 .toast-message {
   position: fixed;
-  top: 12vh;
+  top: 20px;
   right: 20px;
+}
+
+#listings-nav {
+ text-align: right;
+ padding: 12px 0px;
 }

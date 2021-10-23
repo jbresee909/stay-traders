@@ -1,0 +1,13 @@
+.listing-image {
+    background-size: cover;
+    height: 250px;
+    background-position: center;
+    border-radius: .25rem .25rem 0rem 0rem;
+}
+
+.listing-dropdown {
+    position: absolute;
+    top: 250px;
+    right: 0;
+}
+

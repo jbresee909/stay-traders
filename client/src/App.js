@@ -53,7 +53,7 @@ function App() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <div>
+      <div className="container">
 
         {/* A <Switch> looks through its children <Route>s and
           renders the first one that matches the current URL. */}

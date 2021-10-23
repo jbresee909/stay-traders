@@ -1,7 +1,10 @@
-import React, { useState } from "react"
-import { Button, Modal, Form, Toast } from "react-bootstrap";
+import React, { useEffect, useState } from "react"
+import { Button, Modal, Form, Toast, Row } from "react-bootstrap";
 import axios from "axios";
 import "./Listings.css";
+
+// import components
+import ListingCard from "../../ListingCard/ListingCard";
 
 function AddNewListing(props) {
     const [currentFormStep, setCurrentFormStep] = useState(1);
@@ -48,6 +51,9 @@ function AddNewListing(props) {
         axios.post(process.env.REACT_APP_API + '/listings/add', { data: { image: base64EncodedImage, title: listingTitle, description: listingDescription } }, { withCredentials: true })
             .then((res) => {
                 console.log(res.data)
+
+                // get updated listings
+                props.getListings();
 
                 // reset the form
                 setCurrentFormStep(4);
@@ -155,16 +161,43 @@ function AddNewListing(props) {
 
 function Listings() {
     const [modalShow, setModalShow] = React.useState(false);
+    const [listings, setListings] = useState([]);
+
+    const getListings = () => {
+        axios.get(process.env.REACT_APP_API + '/listings/users-listings', { withCredentials: true })
+            .then((res) => {
+                console.log(res.data);
+                setListings(res.data)
+            })
+            .catch((err) => console.error(err))
+    }
+
+    useEffect(() => {
+        getListings();
+    }, [])
 
     return (
         <>
-            <Button variant="primary" onClick={() => setModalShow(true)}>
-                Add New Listing
-            </Button>
-
+            <div id="listings-nav">
+                <Button variant="success" onClick={() => setModalShow(true)} >
+                    Add New Listing
+                </Button>
+            </div>
+            <Row xs={1} md={2} className="g-4">
+                {listings.map((listing) => {
+                    return <ListingCard
+                        key={listing._id}
+                        listingID={listing._id}
+                        title={listing.title}
+                        description={listing.description}
+                        imageURL={listing.imageURL}
+                        getListings={getListings} />
+                })}
+            </Row>
             <AddNewListing
                 show={modalShow}
                 onHide={() => setModalShow(false)}
+                getListings={getListings}
             />
         </>
     );
