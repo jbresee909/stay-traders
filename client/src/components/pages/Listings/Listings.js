@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Button, Modal, Form, Toast, Row } from "react-bootstrap";
 import axios from "axios";
+import imageCompression from 'browser-image-compression';
 import "./Listings.css";
 
 // import components
@@ -17,10 +18,25 @@ function AddNewListing(props) {
     const [showMessageToast, setShowMessageToast] = useState(false);
 
 
-    const handleFileInputChange = (e) => {
+    const handleFileInputChange = async (e) => {
         const file = e.target.files[0];
-        previewFile(file);
-        setSelectedFile(file);
+
+        // compress image
+        const options = {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true
+        }
+
+        try {
+            const compressedFile = await imageCompression(file, options);
+
+            previewFile(compressedFile);
+            setSelectedFile(compressedFile);
+        } catch (error) {
+            console.log(error);
+        }
+
     };
 
     const previewFile = (file) => {
