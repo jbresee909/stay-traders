@@ -87,6 +87,7 @@ function AddNewListing(props) {
                                 id="fileInput"
                                 name="image"
                                 onChange={handleFileInputChange}
+                                accept="image/*"
                             />
                         </Form.Group>
                     </Form>
@@ -177,7 +178,7 @@ function Listings() {
     }, [])
 
     return (
-        <>
+        <div className="container">
             <div id="listings-nav">
                 <Button variant="success" onClick={() => setModalShow(true)} >
                     Add New Listing
@@ -199,7 +200,7 @@ function Listings() {
                 onHide={() => setModalShow(false)}
                 getListings={getListings}
             />
-        </>
+        </div>
     );
 }
 
