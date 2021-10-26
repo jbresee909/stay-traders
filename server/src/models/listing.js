@@ -6,8 +6,8 @@ let listingSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    imageURL: {
-        type: String
+    imageURLs: {
+        type: Array
     },
     title: {
         type: String

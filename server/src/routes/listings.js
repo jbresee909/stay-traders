@@ -8,20 +8,27 @@ module.exports = () => {
     // Routes
     router.post('/add', async (req, res) => {
         try {
-            const fileStr = req.body.data.image;
-            const uploadResponse = await cloudinary.uploader.upload(fileStr, {
-                upload_preset: 'staytraders',
-            });
+            const imageURLs = [];
+
+            for (let i = 0; i < req.body.data.images.length; i++) {
+                const fileStr = req.body.data.images[i];
+                const uploadResponse = await cloudinary.uploader.upload(fileStr, {
+                    upload_preset: 'staytraders',
+                });
+
+                imageURLs.push(uploadResponse.url);
+            }
+
 
             let newListing = new Listing({
                 userID: req.user.id,
-                imageURL: uploadResponse.url,
+                imageURLs: imageURLs,
                 title: req.body.data.title,
                 description: req.body.data.description
             })
 
             newListing.save();
-            res.json(uploadResponse);
+            res.json(newListing);
 
         } catch (err) {
             console.error(err);
