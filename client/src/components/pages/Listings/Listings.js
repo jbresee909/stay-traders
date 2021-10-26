@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Button, Modal, Form, Toast, Row } from "react-bootstrap";
+import { Button, Modal, Form, Toast, Row, Carousel } from "react-bootstrap";
 import axios from "axios";
 import imageCompression from 'browser-image-compression';
 import "./Listings.css";
@@ -15,7 +15,6 @@ function AddNewListing(props) {
     const [listingTitle, setListingTitle] = useState();
     const [listingDescription, setListingDescription] = useState();
     const [showMessageToast, setShowMessageToast] = useState(false);
-
 
     const handleFileInputChange = async (e) => {
         const files = e.target.files;
@@ -84,14 +83,20 @@ function AddNewListing(props) {
             case 1:
                 return (
                     <Form>
-                        {previewSource.map((image, key) => {
-                            return (<img
-                                src={image}
-                                id={key}
-                                alt="chosen"
-                                style={{ height: '300px' }}
-                            />)
-                        })}
+                        <Carousel style={!previewSource[0] ? { display: "none" } : { display: "block" }}>
+                            {previewSource.map((image, key) => {
+                                return (
+                                    <Carousel.Item>
+                                        <img
+                                            className="d-block carousel-image"
+                                            src={image}
+                                            alt={"Slide " + key}
+                                            id={"slide-" + key}
+                                            height="300px"
+                                        />
+                                    </Carousel.Item>)
+                            })}
+                        </Carousel>
                         <Form.Group controlId="formFileMultiple" className="mb-3">
                             <Form.Label>Select photos for your listing </Form.Label>
                             <Form.Control
@@ -142,7 +147,7 @@ function AddNewListing(props) {
                     Create New Listing
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body className="modal-body">
                 {renderFormStep(currentFormStep)}
             </Modal.Body>
             <Modal.Footer>
