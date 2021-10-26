@@ -204,7 +204,7 @@ function Listings() {
                         listingID={listing._id}
                         title={listing.title}
                         description={listing.description}
-                        imageURL={listing.imageURLs[0]}
+                        imageURLs={listing.imageURLs}
                         getListings={getListings} />
                 })}
             </Row>

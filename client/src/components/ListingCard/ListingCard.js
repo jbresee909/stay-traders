@@ -35,7 +35,7 @@ function ListingCard(props) {
     return (
         <Col>
             <Card>
-                <div style={{ backgroundImage: `url(${props.imageURL})` }} className="listing-image"> </div>
+                <div style={{ backgroundImage: `url(${props.imageURLs[0]})` }} className="listing-image"> </div>
                 <Card.Body>
                     <Card.Title>{props.title}</Card.Title>
                     <Card.Text>
