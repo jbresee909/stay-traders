@@ -9,8 +9,7 @@ import ListingCard from "../../ListingCard/ListingCard";
 
 function AddNewListing(props) {
     const [currentFormStep, setCurrentFormStep] = useState(1);
-    const [previewSource, setPreviewSource] = useState();
-    const [selectedFile, setSelectedFile] = useState();
+    const [previewSource, setPreviewSource] = useState([]);
     const [successMsg, setSuccessMsg] = useState();
     const [errMsg, setErrMsg] = useState();
     const [listingTitle, setListingTitle] = useState();
@@ -19,7 +18,7 @@ function AddNewListing(props) {
 
 
     const handleFileInputChange = async (e) => {
-        const file = e.target.files[0];
+        const files = e.target.files;
 
         // compress image
         const options = {
@@ -29,45 +28,42 @@ function AddNewListing(props) {
         }
 
         try {
-            const compressedFile = await imageCompression(file, options);
+            const compressedFiles = []
+            for (let i = 0; i < files.length; i++) {
+                compressedFiles.push(await imageCompression(files[i], options))
+            }
 
-            previewFile(compressedFile);
-            setSelectedFile(compressedFile);
+            previewFiles(compressedFiles);
+
         } catch (error) {
             console.log(error);
         }
 
     };
 
-    const previewFile = (file) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
-            setPreviewSource(reader.result);
-        };
+    const previewFiles = (files) => {
+        for (let i = 0; i < files.length; i++) {
+            const reader = new FileReader();
+            reader.readAsDataURL(files[i]);
+            reader.onloadend = () => {
+                setPreviewSource(previewSource => [...previewSource, reader.result])
+            };
+        }
+
+
     };
 
     const handleSubmitListing = (e) => {
         e.preventDefault();
 
-        if (!selectedFile) return;
+        if (!previewSource[0]) return;
         setCurrentFormStep(3); // set loader
-        const reader = new FileReader();
-        reader.readAsDataURL(selectedFile);
-        reader.onloadend = () => {
-            addListing(reader.result);
-        };
-        reader.onerror = () => {
-            console.error('Reader unable to upload selected image.');
-            setErrMsg('unable to upload image!');
-        };
+        addListing();
     };
 
-    const addListing = async (base64EncodedImage) => {
-        axios.post(process.env.REACT_APP_API + '/listings/add', { data: { image: base64EncodedImage, title: listingTitle, description: listingDescription } }, { withCredentials: true })
-            .then((res) => {
-                console.log(res.data)
-
+    const addListing = async () => {
+        axios.post(process.env.REACT_APP_API + '/listings/add', { data: { images: previewSource, title: listingTitle, description: listingDescription } }, { withCredentials: true })
+            .then(() => {
                 // get updated listings
                 props.getListings();
 
@@ -75,7 +71,7 @@ function AddNewListing(props) {
                 setCurrentFormStep(4);
                 setSuccessMsg('Your listing has been posted!');
                 setShowMessageToast(true);
-                setPreviewSource('');
+                setPreviewSource([]);
                 setCurrentFormStep(1);
                 setListingTitle('');
                 setListingDescription('');
@@ -88,13 +84,14 @@ function AddNewListing(props) {
             case 1:
                 return (
                     <Form>
-                        {previewSource && (
-                            <img
-                                src={previewSource}
+                        {previewSource.map((image, key) => {
+                            return (<img
+                                src={image}
+                                id={key}
                                 alt="chosen"
                                 style={{ height: '300px' }}
-                            />
-                        )}
+                            />)
+                        })}
                         <Form.Group controlId="formFileMultiple" className="mb-3">
                             <Form.Label>Select photos for your listing </Form.Label>
                             <Form.Control
@@ -207,7 +204,7 @@ function Listings() {
                         listingID={listing._id}
                         title={listing.title}
                         description={listing.description}
-                        imageURL={listing.imageURL}
+                        imageURL={listing.imageURLs[0]}
                         getListings={getListings} />
                 })}
             </Row>
