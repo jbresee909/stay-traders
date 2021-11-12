@@ -3,6 +3,7 @@ module.exports = () => {
     const express = require("express");
     const router = express.Router();
     const Listing = require('../models/listing');
+    const Like = require("../models/like")
     const { cloudinary } = require('../utils/cloudinary');
 
     // Routes
@@ -44,7 +45,6 @@ module.exports = () => {
     })
 
     router.post('/delete', (req, res) => {
-        console.log(req.body);
         Listing.updateOne({ _id: req.body.id }, { deleted: true }, (error, response) => {
             if (error) res.json({ error: error, success: null })
             else res.json({ error: null, success: response })
@@ -52,11 +52,31 @@ module.exports = () => {
     })
 
     router.post('/edit', (req, res) => {
-        console.log(req.body);
         Listing.updateOne({ _id: req.body.id }, { title: req.body.title, description: req.body.description }, (error, response) => {
             if (error) res.json({ error: error, success: null })
             else res.json({ error: null, success: response })
         })
+    })
+
+    router.get('/get-listing-batch', (req, res) => {
+        Listing.find({ deleted: false }).exec((err, records) => {
+            if (err) console.error(err);
+            else res.json(records);
+        })
+    })
+
+    router.post('/post-like', (req, res) => {
+        let newLike = new Like({
+            listingID: req.body.listing._id,
+            listing_user_id: req.body.listing.userID,
+            is_like: req.body.isLike,
+            liked_or_disliked_by_userID: req.user.id,
+            date_entered: new Date()
+        });
+
+        newLike.save();
+
+        res.send("like posted")
     })
 
 

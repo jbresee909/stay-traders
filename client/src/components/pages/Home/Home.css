@@ -3,7 +3,51 @@
     height: 93vh;
     background-size:cover;
     background-position: center;
-    color: white;
+}
+
+#listing-swiper-container {
+    background-color: black;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#listing-swiper-container  div {
+  background-color: rgb(173, 163, 163);
+  height: 100%;
+
+}
+
+.listing-images {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;    
+}
+
+#like-button {
+    position: absolute;
+    top: calc(100%  - 8em);
+    left: calc(50% - 8em);
+    box-shadow: 0px 0px grey;
+    transition: 0.3s;
+}
+
+#like-button:hover {
+    box-shadow: 10px 10px grey;
+}
+
+#dislike-button {
+    position: absolute;
+    top: calc(100%  - 8em);
+    left: calc(50% + 5em);
+    box-shadow: 0px 0px grey;
+    transition: 0.3s;
+}
+
+#dislike-button:hover {
+    box-shadow: 10px 10px grey;
 }
 
 #home-hero {
@@ -13,12 +57,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: white;
 }
 
 #home-hero div {
     text-align: center;
     text-decoration: none;
-    color: white
 }
 
 #home-hero h1 {

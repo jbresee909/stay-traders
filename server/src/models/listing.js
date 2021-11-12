@@ -21,4 +21,4 @@ let listingSchema = mongoose.Schema({
     }
 });
 
-let Listing = module.exports = mongoose.model('Listing', listingSchema);
+module.exports = mongoose.model('Listing', listingSchema);
