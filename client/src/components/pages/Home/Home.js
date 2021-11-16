@@ -18,8 +18,11 @@ function Home(props) {
     }
 
     useEffect(() => {
-        axios.get(process.env.REACT_APP_API + '/listings/get-listing-batch')
-            .then((res) => { setListings(res.data) })
+        axios.get(process.env.REACT_APP_API + '/listings/get-listing-batch', { withCredentials: true })
+            .then((res) => {
+                if (res.data.length === 0) return
+                else setListings(res.data)
+            })
             .catch((err) => console.log(err))
     }, [])
 

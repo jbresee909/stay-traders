@@ -59,10 +59,31 @@ module.exports = () => {
     })
 
     router.get('/get-listing-batch', (req, res) => {
-        Listing.find({ deleted: false }).exec((err, records) => {
-            if (err) console.error(err);
-            else res.json(records);
-        })
+        if (req.user) {
+            Like.find({ liked_or_disliked_by_userID: req.user.id }).exec((err, likedListings) => {
+                if (err) console.error(err);
+                else {
+                    let likedListingIds = likedListings.map((like) => like.listingID)
+                    Listing.find({ deleted: false })
+                        .where("_id")
+                        .nin(likedListingIds)
+                        .where("userID")
+                        .ne(req.user.id)
+                        .exec((err, records) => {
+                            if (err) console.error(err);
+                            else res.json(records);
+                        })
+                }
+            })
+        }
+        else {
+            Listing.find({ deleted: false })
+                .exec((err, records) => {
+                    if (err) console.error(err);
+                    else res.json(records);
+                })
+        }
+
     })
 
     router.post('/post-like', (req, res) => {
