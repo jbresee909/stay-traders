@@ -10,23 +10,39 @@ function Home(props) {
 
     const handleLikeListing = (isLike) => {
         axios.post(process.env.REACT_APP_API + '/listings/post-like', { listing: listings[currentListingIndex], isLike: isLike }, { withCredentials: true })
-            .then((res) => {
+            .then(() => {
                 let nextListingIndex = currentListingIndex + 1 === listings.length ? currentListingIndex : currentListingIndex + 1
                 setCurrentListingIndex(nextListingIndex);
+
+                if (nextListingIndex % 5 === 0) getListings();
             })
             .catch((err) => console.error(err))
     }
 
-    useEffect(() => {
+    const getListings = () => {
         axios.get(process.env.REACT_APP_API + '/listings/get-listing-batch', { withCredentials: true })
             .then((res) => {
+                let currentListingIds = listings.map((listing) => listing._id)
+                let newListings = [];
+
+                res.data.forEach((listing, index) => {
+                    if (!currentListingIds.includes(listing._id)) {
+                        newListings.push(res.data[index])
+                    }
+                })
+
                 if (res.data.length === 0) return
-                else setListings(res.data)
+                else if (listings[0].imageURLs.length === 0) setListings(res.data) // if this is the first time retreiving lisitngs
+                else setListings(listings => [...listings].concat(newListings)) // if adding more listings
             })
             .catch((err) => console.log(err))
+    }
+
+    useEffect(() => {
+        getListings();
     }, [])
 
-    console.log(listings)
+    console.log(listings);
 
     if (props.currentUserFirstName) {
         return (

@@ -69,6 +69,7 @@ module.exports = () => {
                         .nin(likedListingIds)
                         .where("userID")
                         .ne(req.user.id)
+                        .limit(10)
                         .exec((err, records) => {
                             if (err) console.error(err);
                             else res.json(records);
