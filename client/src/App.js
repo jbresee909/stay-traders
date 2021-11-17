@@ -40,7 +40,7 @@ function App() {
           <Navbar.Brand href="/">Stay Traders</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
+            <Nav className="me-auto" style={currentUserFirstName ? { visibility: "hidden" } : { visibility: "show" }}>
               <Nav.Link href="/login">Login</Nav.Link>
               <Nav.Link href="/register">Register</Nav.Link>
             </Nav>
@@ -48,7 +48,7 @@ function App() {
               <NavDropdown title={!currentUserFirstName ? "Menu" : currentUserFirstName} className="nav-dropdown-button" id="collasible-nav-dropdown">
                 <NavMenu isUserLoggedIn={currentUserFirstName ? true : false} setCurrentUserFirstName={setCurrentUserFirstName} />
               </NavDropdown>
-              <Image src="https://img.icons8.com/ios/50/000000/cat-profile.png" />
+              <Image src="https://img.icons8.com/ios/50/000000/cat-profile.png" id="profile-pic" />
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -72,7 +72,7 @@ function App() {
           </Route>
         </Switch>
       </div>
-    </Router>
+    </Router >
   );
 }
 

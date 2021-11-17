@@ -6,3 +6,19 @@
 .nav-dropdown-button {
   align-self: center;
 }
+
+
+@media only screen and (max-width: 992px) {
+  #profile-pic {
+    display: none;
+  }
+
+  .nav-dropdown-button {
+    width: 100%;
+    text-align: center !important;
+  }
+
+  .dropdown-menu {
+    text-align: center !important;
+  }
+}

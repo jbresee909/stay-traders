@@ -1,29 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import "./Home.css"
 import { Link } from "react-router-dom";
-import { Carousel } from "react-bootstrap";
+import { Carousel, Modal, Button } from "react-bootstrap";
 import axios from "axios";
 
 function Home(props) {
     const [listings, setListings] = useState([{ imageURLs: [] }]);
     const [currentListingIndex, setCurrentListingIndex] = useState(0);
+    const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+    const [buttonsEnabled, setButtonsEnabled] = useState(true);
+    const [show, setShow] = useState(false);
 
     const handleLikeListing = (isLike) => {
-        axios.post(process.env.REACT_APP_API + '/listings/post-like', { listing: listings[currentListingIndex], isLike: isLike }, { withCredentials: true })
-            .then(() => {
-                let nextListingIndex = currentListingIndex + 1 === listings.length ? currentListingIndex : currentListingIndex + 1
-                setCurrentListingIndex(nextListingIndex);
+        if (buttonsEnabled && (currentListingIndex + 1 <= listings.length)) {
+            setButtonsEnabled(false);
+            console.log('like button clicked')
 
-                if (nextListingIndex % 5 === 0) getListings();
-            })
-            .catch((err) => console.error(err))
+            axios.post(process.env.REACT_APP_API + '/listings/post-like', { listing: listings[currentListingIndex], isLike: isLike }, { withCredentials: true })
+                .then(() => {
+                    let nextListingIndex = currentListingIndex + 1 === listings.length ? currentListingIndex : currentListingIndex + 1 // don't allow listings to progress past last listing
+                    setCurrentListingIndex(nextListingIndex);
+                    setCurrentSlideIndex(0);
+                    setButtonsEnabled(true);
+                    if (currentListingIndex + 1 === listings.length) {
+                        setButtonsEnabled(false) // if the last listing has been reached, disable like/dislike butttons
+                        handleShow();
+                    };
+
+                    if (nextListingIndex % 5 === 0) getListings();
+                })
+                .catch((err) => console.error(err))
+        }
+
     }
+
+    const handleChangeSlide = (selectedIndex) => {
+        setCurrentSlideIndex(selectedIndex);
+    };
 
     const getListings = () => {
         axios.get(process.env.REACT_APP_API + '/listings/get-listing-batch', { withCredentials: true })
             .then((res) => {
                 let currentListingIds = listings.map((listing) => listing._id)
                 let newListings = [];
+
+                if (newListings.length > 0) setButtonsEnabled(true);
 
                 res.data.forEach((listing, index) => {
                     if (!currentListingIds.includes(listing._id)) {
@@ -42,13 +63,16 @@ function Home(props) {
         getListings();
     }, [])
 
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
 
     if (props.currentUserFirstName) {
         return (
             <div id="home-page">
                 <div id="listing-swiper-container">
                     <div className="container">
-                        <Carousel >
+                        <Carousel activeIndex={currentSlideIndex} onSelect={handleChangeSlide}>
                             {listings[currentListingIndex].imageURLs.map((image, key) => {
                                 return (
                                     <Carousel.Item>
@@ -61,6 +85,17 @@ function Home(props) {
                         <img id="dislike-button" onClick={() => handleLikeListing(false)} alt="dislike button" src="https://img.icons8.com/color/80/000000/poor-quality--v1.png" />
                     </div>
                 </div>
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Sorry!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>You've seen all available listings. Come back later when more are available.</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>)
     }
     else {

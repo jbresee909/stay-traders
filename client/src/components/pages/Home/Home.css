@@ -24,11 +24,23 @@
 
 .carousel-control-next-icon {
     background-image: url("https://img.icons8.com/external-becris-lineal-becris/64/000000/external-next-mintab-for-ios-becris-lineal-becris.png") !important;
+    background-color: white;
+    background-size: 50% 50% !important;
+    background-position-x: 20px !important;
+    height: 4rem !important;
+    width: 4rem !important;
+    border-radius: 50%;
 }
 
 .carousel-control-prev-icon {
     background-image: url("https://img.icons8.com/external-becris-lineal-becris/64/000000/external-next-mintab-for-ios-becris-lineal-becris.png") !important;
     transform: rotate(180deg) !important;
+    background-color: white;
+    background-size: 50% 50% !important;
+    background-position-x: 20px !important;
+    height: 4rem !important;
+    width: 4rem !important;
+    border-radius: 50%;
 }
 
 #listing-swiper-container  div {
@@ -44,6 +56,7 @@
 
 #like-button {
     position: absolute;
+    cursor: pointer;
     top: calc(100%  - 8em);
     left: calc(50% - 8em);
     transform: scale(1,1);
@@ -56,6 +69,7 @@
 
 #dislike-button {
     position: absolute;
+    cursor: pointer;
     top: calc(100%  - 8em);
     left: calc(50% + 3em);
     transform: scale(1,1);
