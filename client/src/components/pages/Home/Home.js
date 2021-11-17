@@ -42,7 +42,6 @@ function Home(props) {
         getListings();
     }, [])
 
-    console.log(listings);
 
     if (props.currentUserFirstName) {
         return (

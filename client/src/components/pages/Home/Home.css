@@ -14,12 +14,25 @@
     align-items: center;
 }
 
+#listing-swiper-container span.sr-only{
+    display: none;
+}
+
 #listing-swiper-container a {
     opacity: 1 !important;
 }
 
+.carousel-control-next-icon {
+    background-image: url("https://img.icons8.com/external-becris-lineal-becris/64/000000/external-next-mintab-for-ios-becris-lineal-becris.png") !important;
+}
+
+.carousel-control-prev-icon {
+    background-image: url("https://img.icons8.com/external-becris-lineal-becris/64/000000/external-next-mintab-for-ios-becris-lineal-becris.png") !important;
+    transform: rotate(180deg) !important;
+}
+
 #listing-swiper-container  div {
-  background-color: rgb(173, 163, 163);
+  background-color: white;
   height: 100%;
 }
 
