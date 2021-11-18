@@ -7,31 +7,37 @@ import axios from "axios";
 function Home(props) {
     const [listings, setListings] = useState([{ imageURLs: [] }]);
     const [currentListingIndex, setCurrentListingIndex] = useState(0);
+    const [likeCount, setLikeCount] = useState(1);
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
     const [buttonsEnabled, setButtonsEnabled] = useState(true);
-    const [show, setShow] = useState(false);
+    const [showNoListingsModal, setShowNoListingsModal] = useState(false);
 
     const handleLikeListing = (isLike) => {
-        if (buttonsEnabled && (currentListingIndex + 1 <= listings.length)) {
+        if (buttonsEnabled && (likeCount <= listings.length)) {
             setButtonsEnabled(false);
-            console.log('like button clicked')
 
             axios.post(process.env.REACT_APP_API + '/listings/post-like', { listing: listings[currentListingIndex], isLike: isLike }, { withCredentials: true })
                 .then(() => {
+                    setLikeCount(likeCount + 1)
+
                     let nextListingIndex = currentListingIndex + 1 === listings.length ? currentListingIndex : currentListingIndex + 1 // don't allow listings to progress past last listing
                     setCurrentListingIndex(nextListingIndex);
                     setCurrentSlideIndex(0);
                     setButtonsEnabled(true);
-                    if (currentListingIndex + 1 === listings.length) {
-                        setButtonsEnabled(false) // if the last listing has been reached, disable like/dislike butttons
-                        handleShow();
-                    };
 
                     if (nextListingIndex % 5 === 0) getListings();
+
+                    if (likeCount === listings.length) {
+                        setButtonsEnabled(false) // if the last listing has been reached, disable like/dislike butttons
+                        handleShowNoListingsModal();
+                    }
                 })
                 .catch((err) => console.error(err))
         }
-
+        else if (likeCount === listings.length) {
+            setButtonsEnabled(false) // if the last listing has been reached, disable like/dislike butttons
+            handleShowNoListingsModal();
+        }
     }
 
     const handleChangeSlide = (selectedIndex) => {
@@ -52,7 +58,10 @@ function Home(props) {
                     }
                 })
 
-                if (res.data.length === 0) return
+                if (res.data.length === 0) {
+                    handleShowNoListingsModal();
+                    return;
+                }
                 else if (listings[0].imageURLs.length === 0) setListings(res.data) // if this is the first time retreiving lisitngs
                 else setListings(listings => [...listings].concat(newListings)) // if adding more listings
             })
@@ -63,8 +72,8 @@ function Home(props) {
         getListings();
     }, [])
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleCloseNoListingsModal = () => setShowNoListingsModal(false);
+    const handleShowNoListingsModal = () => setShowNoListingsModal(true);
 
 
     if (props.currentUserFirstName) {
@@ -85,13 +94,13 @@ function Home(props) {
                         <img id="dislike-button" onClick={() => handleLikeListing(false)} alt="dislike button" src="https://img.icons8.com/color/80/000000/poor-quality--v1.png" />
                     </div>
                 </div>
-                <Modal show={show} onHide={handleClose}>
+                <Modal show={showNoListingsModal} onHide={handleCloseNoListingsModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Sorry!</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>You've seen all available listings. Come back later when more are available.</Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
+                        <Button variant="secondary" onClick={handleCloseNoListingsModal}>
                             Close
                         </Button>
                     </Modal.Footer>
