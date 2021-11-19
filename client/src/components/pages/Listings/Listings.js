@@ -75,7 +75,10 @@ function AddNewListing(props) {
                 setListingTitle('');
                 setListingDescription('');
             })
-            .catch((err) => console.error(err))
+            .catch((err) => {
+                setErrMsg("Sorry! Your listing could not be posted.")
+                console.error(err)
+            })
     };
 
     const renderFormStep = (step) => {
