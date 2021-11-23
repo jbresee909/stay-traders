@@ -13,7 +13,10 @@ import "./styles/app.css";
 import Home from './components/pages/Home/Home'
 import Login from './components/pages/Login/Login'
 import Register from './components/pages/Register/Register'
-import ProctedPage from "./components/pages/ProtectedPage/ProtectedPage"
+import Listings from './components/pages/Listings/Listings'
+import Messages from './components/pages/Messages/Messages'
+import Conversation from './components/pages/Conversation/Conversation'
+
 
 // Import Components
 import NavMenu from './components/NavMenu/NavMenu';
@@ -65,7 +68,13 @@ function App() {
             {!currentUserFirstName ? <Register setCurrentUserFirstName={setCurrentUserFirstName} /> : <Redirect to="/" />}
           </Route>
           <Route path="/listings">
-            <ProctedPage page={1} userFirstName={currentUserFirstName} />
+            <Listings />
+          </Route>
+          <Route path="/messages">
+            <Messages />
+          </Route>
+          <Route path="/conversations/:conversationID" >
+            <Conversation />
           </Route>
           <Route path="/">
             {<Home currentUserFirstName={currentUserFirstName} setCurrentUserFirstName={setCurrentUserFirstName} />}

@@ -17,7 +17,7 @@ function NavMenu(props) {
     if (props.isUserLoggedIn) {
         return (
             <>
-                <NavDropdown.Item >Messages</NavDropdown.Item>
+                <Link to="/messages"><NavDropdown.Item href="/messages">Messages</NavDropdown.Item></Link>
                 <NavDropdown.Item >Favorites</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <Link to="/listings"><NavDropdown.Item href="/listings" className="nav-menu-link">Your Listings</NavDropdown.Item> </Link>

@@ -39,6 +39,7 @@ const app = express();
 function createServer() {
   const userRoutes = require("./routes/users")();
   const listingRoutes = require("./routes/listings")();
+  const messageRoutes = require("./routes/messages")();
 
   app.use(morgan('combined'));
   app.use(express.json({ limit: '50mb' }));
@@ -64,6 +65,8 @@ function createServer() {
   /**** Add routes ****/
   app.use("/api/users", userRoutes);
   app.use("/api/listings", listingRoutes);
+  app.use("/api/messages", messageRoutes);
+
 
   // "Redirect" all non-API GET requests to React's entry point (index.html)
   app.get('*', (req, res) =>

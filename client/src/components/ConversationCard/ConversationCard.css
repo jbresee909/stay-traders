@@ -1,0 +1,10 @@
+.conversation-card {
+    margin: 12px 0px;
+    cursor: pointer;
+}
+
+.date-stamp {
+    position: absolute;
+    top: 7px;
+    right: 18px;
+}
