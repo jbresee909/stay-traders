@@ -12,9 +12,8 @@ function Messages() {
     }, [])
 
     const handlePostMessage = () => {
-        axios.post(process.env.REACT_APP_API + '/messages/post-message', { text: "test message" }, { withCredentials: true })
-            .then((res) => {
-                console.log(res);
+        axios.post(process.env.REACT_APP_API + '/messages/post-message', { text: "test message", conversationID: null }, { withCredentials: true })
+            .then(() => {
                 getConversations();
             })
             .catch((err) => console.error(err))
@@ -23,7 +22,6 @@ function Messages() {
     const getConversations = () => {
         axios.get(process.env.REACT_APP_API + '/messages/conversations', { withCredentials: true })
             .then((res) => {
-                console.log(res.data);
                 setConversations(res.data)
             })
             .catch((err) => console.error(err))

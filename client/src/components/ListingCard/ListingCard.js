@@ -16,7 +16,6 @@ function ListingCard(props) {
         axios.post(process.env.REACT_APP_API + '/listings/delete', { id: id })
             .then((res) => {
                 props.getListings();
-                console.log(res)
             })
             .catch((err) => console.error(err))
     }
@@ -26,7 +25,6 @@ function ListingCard(props) {
             .then((res) => {
                 props.getListings();
                 handleCloseModal();
-                console.log(res)
             })
             .catch((err) => console.error(err))
     }

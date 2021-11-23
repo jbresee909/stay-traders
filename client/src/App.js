@@ -24,17 +24,20 @@ import NavMenu from './components/NavMenu/NavMenu';
 
 function App() {
   const [currentUserFirstName, setCurrentUserFirstName] = useState(null);
+  const [currentUserID, setCurrentUserID] = useState(null);
 
   useEffect(() => {
     // Get the user that is currently logged in    
     axios.get(process.env.REACT_APP_API + '/users/user', { withCredentials: true })
       .then((res) => {
         if (res.data.firstName === undefined) setCurrentUserFirstName(null)
-        else setCurrentUserFirstName(res.data.firstName)
+        else {
+          setCurrentUserFirstName(res.data.firstName)
+          setCurrentUserID(res.data.id);
+        }
       })
       .catch((err) => console.log(err))
-  }, [])
-
+  }, [currentUserFirstName, currentUserID])
 
   return (
     <Router>
@@ -74,7 +77,7 @@ function App() {
             <Messages />
           </Route>
           <Route path="/conversations/:conversationID" >
-            <Conversation />
+            <Conversation currentUserID={currentUserID} />
           </Route>
           <Route path="/">
             {<Home currentUserFirstName={currentUserFirstName} setCurrentUserFirstName={setCurrentUserFirstName} />}

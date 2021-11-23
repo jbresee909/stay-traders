@@ -1,6 +1,5 @@
 .messages {
     max-height: 80vh;
-    background-color: red;
     overflow: auto;
     position: absolute;
     bottom: 11vh;
@@ -8,5 +7,18 @@
     margin-right: auto;
     left: 0;
     right: 0;
-    padding: 20px
+    padding: 20px;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
   }
+
+.message {
+    width: 200px;
+    margin-block: 12px;
+}
+
+#send-button {
+    cursor: pointer;
+    background-color: #198754;
+    color: white;
+}

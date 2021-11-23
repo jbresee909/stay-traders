@@ -12,8 +12,7 @@ function ConversationCard(props) {
         props.conversation.messages.sort((a, b) => (a.dateSent < b.dateSent) ? 1 : ((b.dateSent < a.dateSent) ? -1 : 0))
         setMostRecentMessage(props.conversation.messages[0])
 
-        console.log(props.conversation._id)
-    }, [])
+    }, [props.conversation.messages])
 
 
     return (

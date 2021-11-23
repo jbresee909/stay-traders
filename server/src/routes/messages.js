@@ -21,54 +21,71 @@ module.exports = () => {
     })
 
     router.post('/post-message', (req, res) => {
-        let newConversation = new Conversation({
-            users: [
-                {
-                    userID: req.user.id,
-                    firstName: req.user.firstName,
-                    lastName: req.user.lastName
-                },
-                {
-                    userID: 'test',
-                    firstName: req.user.firstName,
-                    lastName: req.user.lastName
-                }
-            ],
-            messages: [
-                {
-                    text: "testing",
+        if (req.body.conversationID == null) {
+            let newConversation = new Conversation({
+                users: [
+                    {
+                        userID: req.user.id,
+                        firstName: req.user.firstName,
+                        lastName: req.user.lastName
+                    },
+                    {
+                        userID: 'test',
+                        firstName: req.user.firstName,
+                        lastName: req.user.lastName
+                    }
+                ],
+                messages: [
+                    {
+                        text: "testing",
+                        fromUserID: req.user.id,
+                        dateSent: new Date()
+                    },
+                    {
+                        text: "testing2",
+                        fromUserID: req.user.id,
+                        dateSent: new Date('1/1/2020')
+                    },
+                    {
+                        text: "testing3",
+                        fromUserID: req.user.id,
+                        dateSent: new Date('1/1/2019')
+                    },
+                    {
+                        text: "testing2",
+                        fromUserID: req.user.id,
+                        dateSent: new Date('1/1/2015')
+                    },
+                    {
+                        text: "This is the text that should be showing",
+                        fromUserID: 'testing',
+                        dateSent: new Date('1/1/2025')
+                    }
+                ],
+                text: req.body.text,
+                dateCreated: new Date(),
+                deletedByUsers: []
+            })
+
+            newConversation.save();
+
+            res.send('message saved');
+        } else {
+            Conversation.findById(req.body.conversationID).exec((err, conversation) => {
+                if (err) console.error(err);
+                let messages = conversation.messages;
+                messages.push({
+                    text: req.body.text,
                     fromUserID: req.user.id,
                     dateSent: new Date()
-                },
-                {
-                    text: "testing2",
-                    fromUserID: req.user.id,
-                    dateSent: new Date('1/1/2020')
-                },
-                {
-                    text: "testing3",
-                    fromUserID: req.user.id,
-                    dateSent: new Date('1/1/2019')
-                },
-                {
-                    text: "testing2",
-                    fromUserID: req.user.id,
-                    dateSent: new Date('1/1/2015')
-                },
-                {
-                    text: "This is the text that should be showing",
-                    fromUserID: req.user.id,
-                    dateSent: new Date('1/1/2025')
-                }
-            ],
-            text: req.body.text,
-            dateCreated: new Date(),
-            deletedByUsers: []
-        })
+                })
 
-        newConversation.save();
-
-        res.send('message saved');
+                Conversation.findByIdAndUpdate(req.body.conversationID, { messages: messages }).exec((error) => {
+                    if (error) console.error(error)
+                    else res.send("message posted!")
+                })
+            })
+        }
     })
 
     return router;
