@@ -6,7 +6,7 @@ import { Card, InputGroup, FormControl } from "react-bootstrap";
 
 function Conversation(props) {
     const [messages, setMessages] = useState([])
-    const [message, setMessage] = useState('Type Message Here');
+    const [message, setMessage] = useState('');
     let { conversationID } = useParams();
 
     useEffect(() => {
@@ -49,7 +49,7 @@ function Conversation(props) {
                 <InputGroup.Text id="send-button" onClick={handlePostMessage}>Send</InputGroup.Text>
                 <FormControl
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder={message}
+                    placeholder='Type Message Here'
                     value={message}
                     aria-label="Default"
                     aria-describedby="inputGroup-sizing-default"
