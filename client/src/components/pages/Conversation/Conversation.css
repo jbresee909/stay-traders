@@ -10,6 +10,7 @@
     padding: 20px;
     border: 1px solid rgba(0,0,0,.125);
     border-radius: 0.25rem;
+    z-index: -1;
   }
 
 .message {
