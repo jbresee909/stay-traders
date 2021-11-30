@@ -10,7 +10,7 @@
     padding: 20px;
     border: 1px solid rgba(0,0,0,.125);
     border-radius: 0.25rem;
-    z-index: -1;
+    z-index: -1; 
   }
 
 .message {
@@ -23,3 +23,16 @@
     background-color: #198754;
     color: white;
 }
+
+
+@media only screen and (max-height: 650px) {
+    .messages {
+      max-height: 75vh;
+    }
+  }
+
+  @media only screen and (max-height: 400px) {
+    .messages {
+      max-height: 50vh;
+    }
+  }

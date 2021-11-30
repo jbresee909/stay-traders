@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from 'react-router-dom';
 import axios from "axios";
 import "./Conversation.css";
@@ -8,15 +8,21 @@ function Conversation(props) {
     const [messages, setMessages] = useState([])
     const [message, setMessage] = useState('');
     let { conversationID } = useParams();
+    const messagesEndRef = useRef(null)
 
     useEffect(() => {
         getMessages();
-    }, [conversationID])
+    }, [])
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
 
     const getMessages = () => {
         axios.get(process.env.REACT_APP_API + '/messages/conversation/' + conversationID, { withCredentials: true })
             .then((res) => {
                 setMessages(res.data[0].messages.sort((a, b) => (a.dateSent > b.dateSent) ? 1 : ((b.dateSent > a.dateSent) ? -1 : 0)))
+                scrollToBottom();
             })
             .catch((err) => console.error(err))
     }
@@ -55,6 +61,7 @@ function Conversation(props) {
                     aria-describedby="inputGroup-sizing-default"
                 />
             </InputGroup>
+            <div ref={messagesEndRef} />
         </div>
     )
 }
