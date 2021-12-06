@@ -3,7 +3,7 @@ module.exports = () => {
     const express = require("express");
     const router = express.Router();
     const Listing = require('../models/listing');
-    const Like = require("../models/like")
+    const Like = require("../models/like");
     const { cloudinary } = require('../utils/cloudinary');
 
     // Routes
@@ -99,6 +99,31 @@ module.exports = () => {
         newLike.save();
 
         res.send("like posted")
+    })
+
+    router.get('/:listingID', (req, res) => {
+        Listing.findById(req.params.listingID).exec((err, record) => {
+            if (err) console.error(err);
+            else res.send(record)
+        })
+    })
+
+    router.post('/is-a-match', (req, res) => {
+        Like.find({
+            listing_user_id: req.user.id,
+            liked_or_disliked_by_userID: req.body.listing.userID,
+            is_like: true
+        }).limit(1)
+            .exec((err, records) => {
+                if (err) console.error(err)
+                else if (records.length === 0) res.send({ match: null })
+                else res.send({
+                    match: {
+                        firstListing: req.body.listing._id, // listing the user just liked
+                        secondListing: records[0].listingID // the listing other user liked 
+                    }
+                })
+            })
     })
 
 

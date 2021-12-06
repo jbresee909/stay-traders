@@ -107,3 +107,25 @@
     border-radius: 50px;
 }
 
+#match-listing-pics {
+    display: flex;
+    justify-content: center;
+}
+
+.match-listing-pic {
+  height: 200px;
+  width: 200px;
+  margin: 12px;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+@media only screen and (max-width: 600px) {
+    .match-listing-pic {
+        height: 150px;
+        width: 150px;
+      }
+  }
+

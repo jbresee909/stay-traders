@@ -29,9 +29,6 @@ function Messages() {
 
     return (
         <div className='container pt-3'>
-            <div id="messages-buttons">
-                <Button onClick={handlePostMessage} variant="success">Create Message</Button>
-            </div>
             {conversations.map((conversation, key) => {
                 return <ConversationCard conversation={conversation} key={key} />
             })}

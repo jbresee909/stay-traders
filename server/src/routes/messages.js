@@ -2,6 +2,7 @@ module.exports = () => {
     const express = require("express");
     const router = express.Router();
     const Conversation = require('../models/conversation');
+    const User = require("../models/user");
 
     // Routes
     router.get('/conversation/:conversationID', (req, res) => {
@@ -21,55 +22,38 @@ module.exports = () => {
     })
 
     router.post('/post-message', (req, res) => {
+        console.log(req.body.listing)
         if (req.body.conversationID == null) {
-            let newConversation = new Conversation({
-                users: [
-                    {
-                        userID: req.user.id,
-                        firstName: req.user.firstName,
-                        lastName: req.user.lastName
-                    },
-                    {
-                        userID: 'test',
-                        firstName: req.user.firstName,
-                        lastName: req.user.lastName
-                    }
-                ],
-                messages: [
-                    {
-                        text: "testing",
-                        fromUserID: req.user.id,
-                        dateSent: new Date()
-                    },
-                    {
-                        text: "testing2",
-                        fromUserID: req.user.id,
-                        dateSent: new Date('1/1/2020')
-                    },
-                    {
-                        text: "testing3",
-                        fromUserID: req.user.id,
-                        dateSent: new Date('1/1/2019')
-                    },
-                    {
-                        text: "testing2",
-                        fromUserID: req.user.id,
-                        dateSent: new Date('1/1/2015')
-                    },
-                    {
-                        text: "This is the text that should be showing",
-                        fromUserID: 'testing',
-                        dateSent: new Date('1/1/2025')
-                    }
-                ],
-                text: req.body.text,
-                dateCreated: new Date(),
-                deletedByUsers: []
+            User.findById(req.body.listing.userID).exec((error, user) => {
+                if (error) console.error(error);
+                let newConversation = new Conversation({
+                    users: [
+                        {
+                            userID: req.user.id,
+                            firstName: req.user.firstName,
+                            lastName: req.user.lastName
+                        },
+                        {
+                            userID: user._id,
+                            firstName: user.firstName,
+                            lastName: user.lastName
+                        }
+                    ],
+                    messages: [
+                        {
+                            text: "Congrats! You've you both liked each other's properties. You can start messaging to figure out dates for when you want to stay at each other's place.",
+                            fromUserID: 'system',
+                            dateSent: new Date()
+                        }
+                    ],
+                    dateCreated: new Date(),
+                    deletedByUsers: []
+                })
+
+                newConversation.save();
+
+                res.send(newConversation);
             })
-
-            newConversation.save();
-
-            res.send('message saved');
         } else {
             Conversation.findById(req.body.conversationID).exec((err, conversation) => {
                 if (err) console.error(err);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./Home.css"
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Carousel, Modal, Button } from "react-bootstrap";
 import axios from "axios";
 
@@ -11,6 +11,10 @@ function Home(props) {
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
     const [buttonsEnabled, setButtonsEnabled] = useState(true);
     const [showNoListingsModal, setShowNoListingsModal] = useState(false);
+    const [showMatchModal, setShowMatchModal] = useState(false);
+    const [matchFirstListingPic, setMatchFirstListingPic] = useState('');
+    const [matchSecondListingPic, setMatchSecondListingPic] = useState('');
+    let history = useHistory();
 
     const handleLikeListing = (isLike) => {
         if (buttonsEnabled && (likeCount <= listings.length)) {
@@ -24,6 +28,8 @@ function Home(props) {
                     setCurrentListingIndex(nextListingIndex);
                     setCurrentSlideIndex(0);
                     setButtonsEnabled(true);
+
+                    checkForMatch();
 
                     if (nextListingIndex % 5 === 0) getListings();
 
@@ -43,6 +49,31 @@ function Home(props) {
     const handleChangeSlide = (selectedIndex) => {
         setCurrentSlideIndex(selectedIndex);
     };
+
+    const handleStartConversation = () => {
+        axios.post(process.env.REACT_APP_API + '/messages/post-message', { listing: listings[currentListingIndex], conversationID: null }, { withCredentials: true })
+            .then((res) => {
+                history.push('/conversations/' + res.data._id)
+            })
+            .catch((err) => console.error(err))
+    }
+
+    const checkForMatch = () => {
+        axios.post(process.env.REACT_APP_API + '/listings/is-a-match', { listing: listings[currentListingIndex] }, { withCredentials: true })
+            .then((res) => {
+                if (res.data.match) {
+                    handleShowMatchModal()
+                    axios.get(process.env.REACT_APP_API + '/listings/' + res.data.match.firstListing)
+                        .then((res) => setMatchFirstListingPic(res.data.imageURLs[0]))
+                        .catch((err) => console.error(err))
+
+                    axios.get(process.env.REACT_APP_API + '/listings/' + res.data.match.secondListing)
+                        .then((res) => setMatchSecondListingPic(res.data.imageURLs[0]))
+                        .catch((err) => console.error(err))
+                }
+            })
+            .catch((err) => console.error(err))
+    }
 
     const getListings = () => {
         axios.get(process.env.REACT_APP_API + '/listings/get-listing-batch', { withCredentials: true })
@@ -75,6 +106,8 @@ function Home(props) {
     const handleCloseNoListingsModal = () => setShowNoListingsModal(false);
     const handleShowNoListingsModal = () => setShowNoListingsModal(true);
 
+    const handleCloseMatchModal = () => setShowMatchModal(false);
+    const handleShowMatchModal = () => setShowMatchModal(true);
 
     if (props.currentUserFirstName) {
         return (
@@ -101,6 +134,28 @@ function Home(props) {
                     <Modal.Body>You've seen all available listings. Come back later when more are available.</Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleCloseNoListingsModal}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+                <Modal show={showMatchModal}
+                    onHide={handleCloseMatchModal}
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>It's a match!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div id="match-listing-pics">
+                            <div className="match-listing-pic" style={{ backgroundImage: 'url(' + matchFirstListingPic + ')' }} />
+                            <div className="match-listing-pic" style={{ backgroundImage: 'url(' + matchSecondListingPic + ')' }} />
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={handleStartConversation}>
+                            Start Conversation With User
+                        </Button>
+                        <Button variant="secondary" onClick={handleCloseMatchModal}>
                             Close
                         </Button>
                     </Modal.Footer>
