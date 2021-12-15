@@ -1,3 +1,14 @@
 .secure-text input {
     -webkit-text-security: disc;
 }
+
+#login-form {
+    width: 60vw;
+    margin: 0 auto;
+}
+
+@media only screen and (max-width: 900px) {
+    #login-form {
+        width: 100%;
+    }
+  }

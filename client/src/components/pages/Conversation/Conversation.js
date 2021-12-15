@@ -12,7 +12,14 @@ function Conversation(props) {
 
     useEffect(() => {
         getMessages();
+
+        // check for new messages every 5 seconds
+        setInterval(() => {
+            getMessages();
+        }, 5000);
+
     }, [])
+
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })

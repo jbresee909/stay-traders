@@ -49,7 +49,7 @@ function Register(props) {
     }
 
     return (
-        <div>
+        <div id="register-form">
             <Card className="container p-3">
                 <h2>Register</h2>
                 <Form>

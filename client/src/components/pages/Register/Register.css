@@ -1,3 +1,14 @@
 .secure-text input {
     -webkit-text-security: disc;
 }
+
+#register-form {
+    width: 50vw;
+    margin: 0 auto;
+}
+
+@media only screen and (max-width: 900px) {
+    #register-form {
+        width: 100%;
+    }
+  }

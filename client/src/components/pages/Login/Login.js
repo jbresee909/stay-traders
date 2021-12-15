@@ -22,32 +22,34 @@ function Login(props) {
         }).catch((err) => console.log(err))
     }
     return (
-        <Card className="container p-3">
-            <h2>Login</h2>
-            <Form>
-                <Alert variant='danger' style={!message ? { display: "none" } : { display: 'block' }}>
-                    {message}
-                </Alert>
-                <FloatingLabel
-                    controlId="username"
-                    label="Email address"
-                    className="mb-3"
-                    onChange={(e) => setLoginUsername(e.target.value)}
-                >
-                    <Form.Control type="email" placeholder="name@example.com" />
-                </FloatingLabel>
-                <FloatingLabel
-                    controlId="password"
-                    label="Password"
-                    className="mb-3 secure-text"
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                >
-                    <Form.Control type="password" placeholder="Password" />
-                </FloatingLabel>
-                <Button className="mt-2 mb-2" type="submit" variant="primary" onClick={(e) => handleLogin(e)}>Login</Button>
-            </Form>
-            <p>Don't have an account? <Link to="/register">Register</Link> </p>
-        </Card>
+        <div id="login-form">
+            <Card className="container p-3">
+                <h2>Login</h2>
+                <Form>
+                    <Alert variant='danger' style={!message ? { display: "none" } : { display: 'block' }}>
+                        {message}
+                    </Alert>
+                    <FloatingLabel
+                        controlId="username"
+                        label="Email address"
+                        className="mb-3"
+                        onChange={(e) => setLoginUsername(e.target.value)}
+                    >
+                        <Form.Control type="email" placeholder="name@example.com" />
+                    </FloatingLabel>
+                    <FloatingLabel
+                        controlId="password"
+                        label="Password"
+                        className="mb-3 secure-text"
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                    >
+                        <Form.Control type="password" placeholder="Password" />
+                    </FloatingLabel>
+                    <Button className="mt-2 mb-2" type="submit" variant="primary" onClick={(e) => handleLogin(e)}>Login</Button>
+                </Form>
+                <p>Don't have an account? <Link to="/register">Register</Link> </p>
+            </Card>
+        </div>
     );
 }
 

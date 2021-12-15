@@ -6,6 +6,21 @@ module.exports = () => {
 
     // Routes
     router.get('/conversation/:conversationID', (req, res) => {
+        // mark all messages from conversation as read if sent by a different user
+        Conversation.findById(req.params.conversationID).exec((err, conversation) => {
+            if (err) console.error(err)
+            else {
+                let updatedMessages = conversation.messages;
+                updatedMessages.forEach((message) => {
+                    if (String(message.fromUserID) !== String(req.user.id)) message.read = true;
+                });
+
+                Conversation.findByIdAndUpdate(req.params.conversationID, { messages: updatedMessages }).exec((err2) => {
+                    if (err2) console.error(err2);
+                })
+            }
+        })
+
         Conversation.find({ _id: req.params.conversationID }).exec((err, records) => {
             if (err) console.error(err)
             res.send(records);
@@ -22,7 +37,6 @@ module.exports = () => {
     })
 
     router.post('/post-message', (req, res) => {
-        console.log(req.body.listing)
         if (req.body.conversationID == null) {
             User.findById(req.body.listing.userID).exec((error, user) => {
                 if (error) console.error(error);
@@ -43,6 +57,7 @@ module.exports = () => {
                         {
                             text: "Congrats! You've you both liked each other's properties. You can start messaging to figure out dates for when you want to stay at each other's place.",
                             fromUserID: 'system',
+                            read: false,
                             dateSent: new Date()
                         }
                     ],
@@ -61,6 +76,7 @@ module.exports = () => {
                 messages.push({
                     text: req.body.text,
                     fromUserID: req.user.id,
+                    read: false,
                     dateSent: new Date()
                 })
 
