@@ -5,10 +5,10 @@ import { Link } from "react-router-dom"
 import "./NavMenu.css"
 
 function NavMenu(props) {
+
     const handleLogout = () => {
         axios.post(process.env.REACT_APP_API + '/users/logout', { withCredentials: true })
             .then((res) => {
-                console.log(res)
                 props.setCurrentUserFirstName(null)
             })
             .catch((err) => console.log(err))
@@ -17,7 +17,10 @@ function NavMenu(props) {
     if (props.isUserLoggedIn) {
         return (
             <>
-                <Link to="/messages"><NavDropdown.Item href="/messages">Messages</NavDropdown.Item></Link>
+                <Link to="/messages">
+                    <NavDropdown.Item href="/messages">Messages</NavDropdown.Item>
+                    <span id="unread-message-count-dropdown" style={props.unreadMessageCount > 0 ? { display: "block" } : { display: "none" }}>{props.unreadMessageCount}</span>
+                </Link>
                 <NavDropdown.Item >Favorites</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <Link to="/listings"><NavDropdown.Item href="/listings" className="nav-menu-link">Your Listings</NavDropdown.Item> </Link>

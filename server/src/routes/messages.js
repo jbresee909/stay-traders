@@ -61,6 +61,7 @@ module.exports = () => {
                             dateSent: new Date()
                         }
                     ],
+                    lastActivity: new Date(),
                     dateCreated: new Date(),
                     deletedByUsers: []
                 })
@@ -80,12 +81,24 @@ module.exports = () => {
                     dateSent: new Date()
                 })
 
-                Conversation.findByIdAndUpdate(req.body.conversationID, { messages: messages }).exec((error) => {
+                Conversation.findByIdAndUpdate(req.body.conversationID, { messages: messages, lastActivity: new Date() }).exec((error) => {
                     if (error) console.error(error)
                     else res.send("message posted!")
                 })
             })
         }
+    })
+
+    router.get('/unread-message-count', (req, res) => {
+        Conversation.find({ "messages.read": false })
+            .where("messages.fromUserID")
+            .ne(String(req.user.id))
+            .exec((err, conversations) => {
+                if (err) console.error(err);
+                else {
+                    res.send({ count: conversations.length })
+                }
+            })
     })
 
     return router;

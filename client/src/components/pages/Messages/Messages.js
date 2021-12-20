@@ -13,6 +13,8 @@ function Messages() {
     const getConversations = () => {
         axios.get(process.env.REACT_APP_API + '/messages/conversations', { withCredentials: true })
             .then((res) => {
+                let conversations = res.data;
+                conversations.sort((a, b) => (a.lastActivity < b.lastActivity) ? 1 : ((b.lastActivity < a.lastActivity) ? -1 : 0))
                 setConversations(res.data)
             })
             .catch((err) => console.error(err))

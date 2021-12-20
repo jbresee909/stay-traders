@@ -9,6 +9,9 @@ let conversationSchema = mongoose.Schema({
     messages: {
         type: Array
     },
+    lastActivity: {
+        type: Date
+    },
     dateCreated: {
         type: Date,
         required: true

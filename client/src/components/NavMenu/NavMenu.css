@@ -6,3 +6,20 @@
 .dropdown-item:active {
     background-color: white;
 }
+
+#unread-message-count-dropdown {
+    position: absolute;
+    top: 12px;
+    right: 30px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 0px 8px;
+}
+
+@media only screen and (max-width: 992px) {
+    #unread-message-count-dropdown {
+        top: 53px;
+        right: 30px;
+    }
+  }
