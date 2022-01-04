@@ -89,14 +89,23 @@ module.exports = () => {
         }
     })
 
+    // GET all conversations that have unread messages
     router.get('/unread-message-count', (req, res) => {
         Conversation.find({ "messages.read": false })
-            .where("messages.fromUserID")
-            .ne(String(req.user.id))
             .exec((err, conversations) => {
                 if (err) console.error(err);
                 else {
-                    res.send({ count: conversations.length })
+                    // loop through all the messages and count any the are not from the current user.
+                    let unreadMessageCount = 0
+                    conversations.forEach((conversation) => {
+
+                        conversation.messages.forEach((message) => {
+                            if (!message.read && message.fromUserID != String(req.user.id)) unreadMessageCount++;
+                        })
+
+                    })
+
+                    res.send({ count: unreadMessageCount })
                 }
             })
     })
