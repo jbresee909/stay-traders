@@ -29,15 +29,12 @@ function App() {
   const [currentUserID, setCurrentUserID] = useState(null);
   const [unreadMessageCount, setUnreadMessageCount] = useState(0);
 
-  console.log("unread messages: ", unreadMessageCount)
-
   useEffect(() => {
     // Get the user that is currently logged in    
     axios.get(process.env.REACT_APP_API + '/users/user', { withCredentials: true })
       .then((res) => {
         if (res.data.firstName === undefined) setCurrentUserFirstName(null)
         else {
-          console.log(res.data)
           setCurrentUserFirstName(res.data.firstName)
           setCurrentUserLastName(res.data.lastName)
           setCurrentUserUsername(res.data.username)
@@ -98,13 +95,13 @@ function App() {
             {!currentUserFirstName ? <Register setCurrentUserFirstName={setCurrentUserFirstName} /> : <Redirect to="/" />}
           </Route>
           <Route path="/listings">
-            <Listings />
+            {!currentUserFirstName ? <Redirect to="/" /> : <Listings />}
           </Route>
           <Route path="/messages">
-            <Messages />
+            {!currentUserFirstName ? <Redirect to="/" /> : <Messages />}
           </Route>
           <Route path="/conversations/:conversationID" >
-            <Conversation currentUserID={currentUserID} />
+            {!currentUserFirstName ? <Redirect to="/" /> : <Conversation currentUserID={currentUserID} />}
           </Route>
           <Route path="/">
             {<Home currentUserFirstName={currentUserFirstName} setCurrentUserFirstName={setCurrentUserFirstName} />}
