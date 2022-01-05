@@ -49,9 +49,12 @@ function App() {
   }, [currentUserFirstName, currentUserID])
 
   const getUnreadMessageCount = () => {
-    axios.get(process.env.REACT_APP_API + '/messages/unread-message-count', { withCredentials: true })
-      .then((data) => setUnreadMessageCount(data.data.count))
-      .catch((err) => console.error(err));
+    // Only make call for unread messages when user is logged in.
+    if (currentUserFirstName) {
+      axios.get(process.env.REACT_APP_API + '/messages/unread-message-count', { withCredentials: true })
+        .then((data) => setUnreadMessageCount(data.data.count))
+        .catch((err) => console.error(err));
+    }
   }
 
   return (
