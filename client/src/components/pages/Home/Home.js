@@ -12,8 +12,10 @@ function Home(props) {
     const [buttonsEnabled, setButtonsEnabled] = useState(true);
     const [showNoListingsModal, setShowNoListingsModal] = useState(false);
     const [showMatchModal, setShowMatchModal] = useState(false);
-    const [matchFirstListingPic, setMatchFirstListingPic] = useState('');
-    const [matchSecondListingPic, setMatchSecondListingPic] = useState('');
+    const [showListingDetailsModal, setShowListingDetailsModal] = useState(false);
+    const [matchFirstListing, setMatchFirstListing] = useState({ imageURLs: [] });
+    const [matchSecondListing, setMatchSecondListing] = useState({ imageURLs: [] });
+
     let history = useHistory();
 
     const handleLikeListing = (isLike) => {
@@ -51,7 +53,7 @@ function Home(props) {
     };
 
     const handleStartConversation = () => {
-        axios.post(process.env.REACT_APP_API + '/messages/post-message', { listing: listings[currentListingIndex], conversationID: null }, { withCredentials: true })
+        axios.post(process.env.REACT_APP_API + '/messages/post-message', { listing: listings[currentListingIndex], conversationID: null, matchListings: [matchFirstListing, matchSecondListing] }, { withCredentials: true })
             .then((res) => {
                 history.push('/conversations/' + res.data._id)
             })
@@ -64,11 +66,15 @@ function Home(props) {
                 if (res.data.match) {
                     handleShowMatchModal()
                     axios.get(process.env.REACT_APP_API + '/listings/' + res.data.match.firstListing)
-                        .then((res) => setMatchFirstListingPic(res.data.imageURLs[0]))
+                        .then((res) => {
+                            setMatchFirstListing(res.data)
+                        })
                         .catch((err) => console.error(err))
 
                     axios.get(process.env.REACT_APP_API + '/listings/' + res.data.match.secondListing)
-                        .then((res) => setMatchSecondListingPic(res.data.imageURLs[0]))
+                        .then((res) => {
+                            setMatchSecondListing(res.data)
+                        })
                         .catch((err) => console.error(err))
                 }
             })
@@ -109,6 +115,9 @@ function Home(props) {
     const handleCloseMatchModal = () => setShowMatchModal(false);
     const handleShowMatchModal = () => setShowMatchModal(true);
 
+    const handleCloseListingDetailsModal = () => setShowListingDetailsModal(false);
+    const handleShowListingDetailsModal = () => setShowListingDetailsModal(true);
+
     if (props.currentUserFirstName) {
         return (
             <div id="home-page">
@@ -118,7 +127,12 @@ function Home(props) {
                             {listings[currentListingIndex].imageURLs.map((image, key) => {
                                 return (
                                     <Carousel.Item>
-                                        <div id={key} style={{ backgroundImage: 'url(' + image + ')' }} className="listing-images" />
+                                        <div id={key} style={{ backgroundImage: 'url(' + image + ')' }} className="listing-images">
+                                            <span id="listing-details">
+                                                <h3 >{listings[currentListingIndex].city}, {listings[currentListingIndex].state}</h3>
+                                                <Button onClick={handleShowListingDetailsModal}>Details</Button>
+                                            </span>
+                                        </div>
                                     </Carousel.Item>
                                 )
                             })}
@@ -147,8 +161,8 @@ function Home(props) {
                     </Modal.Header>
                     <Modal.Body>
                         <div id="match-listing-pics">
-                            <div className="match-listing-pic" style={{ backgroundImage: 'url(' + matchFirstListingPic + ')' }} />
-                            <div className="match-listing-pic" style={{ backgroundImage: 'url(' + matchSecondListingPic + ')' }} />
+                            <div className="match-listing-pic" style={{ backgroundImage: 'url(' + matchFirstListing.imageURLs[0] + ')' }} />
+                            <div className="match-listing-pic" style={{ backgroundImage: 'url(' + matchSecondListing.imageURLs[0] + ')' }} />
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
@@ -156,6 +170,22 @@ function Home(props) {
                             Start Conversation With User
                         </Button>
                         <Button variant="secondary" onClick={handleCloseMatchModal}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+                <Modal show={showListingDetailsModal} onHide={handleCloseListingDetailsModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Listing Details</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <h3>Title</h3>
+                        <p>{listings[currentListingIndex].title}</p>
+                        <h3>Listing Description</h3>
+                        <p>{listings[currentListingIndex].description}</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseListingDetailsModal}>
                             Close
                         </Button>
                     </Modal.Footer>

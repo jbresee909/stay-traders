@@ -63,7 +63,8 @@ module.exports = () => {
                     ],
                     lastActivity: new Date(),
                     dateCreated: new Date(),
-                    deletedByUsers: []
+                    deletedByUsers: [],
+                    matchListingsInfo: req.body.matchListings
                 })
 
                 newConversation.save();

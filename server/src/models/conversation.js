@@ -18,6 +18,9 @@ let conversationSchema = mongoose.Schema({
     },
     deletedByUsers: {
         type: Array
+    },
+    matchListingsInfo: {
+        type: Array
     }
 });
 

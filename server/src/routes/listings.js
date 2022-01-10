@@ -25,7 +25,9 @@ module.exports = () => {
                 userID: req.user.id,
                 imageURLs: imageURLs,
                 title: req.body.data.title,
-                description: req.body.data.description
+                description: req.body.data.description,
+                city: req.body.data.city,
+                state: req.body.data.state
             })
 
             newListing.save();

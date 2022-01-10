@@ -18,6 +18,28 @@
     margin-block: 12px;
 }
 
+#listing-info {
+ display: flex;
+}
+
+.listing-info-card {
+  margin-inline-end: 8px;
+  margin-top: 8px;
+  display: flex;
+  border: 1px solid rgba(0,0,0,.125);
+  padding: 12px;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.listing-thumbnail {
+  width: 100px;
+  background-position: center;
+  background-size: cover;
+  border-radius: 5px;
+  margin-inline-start: 8px;
+}
+
 #send-button {
     cursor: pointer;
     background-color: #198754;

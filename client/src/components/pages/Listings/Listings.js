@@ -14,6 +14,8 @@ function AddNewListing(props) {
     const [errMsg, setErrMsg] = useState();
     const [listingTitle, setListingTitle] = useState();
     const [listingDescription, setListingDescription] = useState();
+    const [listingCity, setListingCity] = useState();
+    const [listingState, setListingState] = useState();
     const [showMessageToast, setShowMessageToast] = useState(false);
 
     const handleFileInputChange = async (e) => {
@@ -61,7 +63,7 @@ function AddNewListing(props) {
     };
 
     const addListing = async () => {
-        axios.post(process.env.REACT_APP_API + '/listings/add', { data: { images: previewSource, title: listingTitle, description: listingDescription } }, { withCredentials: true })
+        axios.post(process.env.REACT_APP_API + '/listings/add', { data: { images: previewSource, title: listingTitle, description: listingDescription, city: listingCity, state: listingState } }, { withCredentials: true })
             .then(() => {
                 // get updated listings
                 props.getListings();
@@ -123,6 +125,14 @@ function AddNewListing(props) {
                         <Form.Group className="mb-3" controlId="ControlTextarea1">
                             <Form.Label>Brief Description</Form.Label>
                             <Form.Control as="textarea" rows={3} onChange={(e) => setListingDescription(e.target.value)} placeHolder={listingDescription} />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="ControlTextarea1">
+                            <Form.Label>City</Form.Label>
+                            <Form.Control onChange={(e) => setListingCity(e.target.value)} placeHolder={listingCity} />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="ControlTextarea1">
+                            <Form.Label>State</Form.Label>
+                            <Form.Control onChange={(e) => setListingState(e.target.value)} placeHolder={listingState} />
                         </Form.Group>
                         <Button type="submit">Submit</Button>
                     </Form>

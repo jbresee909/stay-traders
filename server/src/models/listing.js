@@ -15,6 +15,12 @@ let listingSchema = mongoose.Schema({
     description: {
         type: String
     },
+    city: {
+        type: String
+    },
+    state: {
+        type: String
+    },
     deleted: {
         type: Boolean,
         default: false

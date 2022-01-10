@@ -63,7 +63,7 @@ function App() {
         <Container>
           <Navbar.Brand href="/">Stay Traders</Navbar.Brand>
           <div>
-            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" style={unreadMessageCount > 0 ? { position: "relative" } : { position: "inherit" }} />
             <span id="unread-message-count-toggle" style={unreadMessageCount > 0 ? { display: "block" } : { display: "none" }}>{unreadMessageCount}</span>
           </div>
           <Navbar.Collapse id="responsive-navbar-nav">
