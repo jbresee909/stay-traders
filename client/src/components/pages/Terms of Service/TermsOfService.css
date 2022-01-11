@@ -1,0 +1,9 @@
+#terms-of-service-page {
+   width: 50%;
+}
+
+@media only screen and (max-width: 900px) {
+    #terms-of-service-page {
+        width: 100%;
+    }
+}

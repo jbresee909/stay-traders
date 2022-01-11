@@ -13,6 +13,7 @@ import "./styles/app.css";
 import Home from './components/pages/Home/Home'
 import Login from './components/pages/Login/Login'
 import Register from './components/pages/Register/Register'
+import TermsOfService from './components/pages/Terms of Service/TermsOfService'
 import Listings from './components/pages/Listings/Listings'
 import Messages from './components/pages/Messages/Messages'
 import Conversation from './components/pages/Conversation/Conversation'
@@ -96,6 +97,9 @@ function App() {
           </Route>
           <Route path="/register">
             {!currentUserFirstName ? <Register setCurrentUserFirstName={setCurrentUserFirstName} /> : <Redirect to="/" />}
+          </Route>
+          <Route path="/terms-of-service">
+            <TermsOfService />
           </Route>
           <Route path="/listings">
             {!currentUserFirstName ? <Redirect to="/" /> : <Listings />}

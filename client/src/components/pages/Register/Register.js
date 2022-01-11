@@ -13,6 +13,7 @@ function Register(props) {
     const [registerPassword, setRegisterPassword] = useState('password');
     const [registerVeriftyPassword, setRegisterVerifyPassword] = useState('verify password');
     const [message, setMessage] = useState(null);
+    const [agreedToTermsOfService, setAgreedToTermsOfService] = useState(false);
 
     // Register a User
     const handleRegistration = (e) => {
@@ -36,6 +37,11 @@ function Register(props) {
             .catch((err) => console.log(err))
     }
 
+    // Handler for when check box is checked for terms of service.
+    const handleSetAgreedToTermsOfService = () => {
+        setAgreedToTermsOfService(!agreedToTermsOfService);
+    }
+
     const isValidForm = () => {
         if (!registerEmail.includes("@") || !registerEmail.includes(".")) {
             setMessage("Not a valid email");
@@ -43,6 +49,10 @@ function Register(props) {
         }
         if (registerPassword !== registerVeriftyPassword) {
             setMessage("Passwords do not match")
+            return false;
+        }
+        if (!agreedToTermsOfService) {
+            setMessage("Must agree to terms of service to continue.")
             return false;
         }
         else return true;
@@ -96,6 +106,10 @@ function Register(props) {
                     >
                         <Form.Control type="password" placeholder="Verifty Password" />
                     </FloatingLabel>
+                    <Form.Group className="mb-3" controlId="formBasicCheckbox" id="terms-of-service">
+                        <Form.Check type="checkbox" label="Agree to the " onChange={handleSetAgreedToTermsOfService} /> &nbsp;
+                        <Link to="/terms-of-service">terms of service</Link>
+                    </Form.Group>
                     <Button className="mt-2 mb-2" type="submit" variant="primary" onClick={(e) => handleRegistration(e)}>Register</Button>
                 </Form>
                 <p>Already have an account? <Link to="/login">Login</Link></p>

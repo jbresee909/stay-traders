@@ -7,6 +7,10 @@
     margin: 0 auto;
 }
 
+#terms-of-service {
+    display: flex;
+}
+
 @media only screen and (max-width: 900px) {
     #register-form {
         width: 100%;
