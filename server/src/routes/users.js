@@ -31,6 +31,7 @@ module.exports = () => {
           lastName: req.body.lastName,
           username: req.body.username,
           password: hashedPassword,
+          securityQuestions: req.body.securityQuestions
         });
         await newUser.save().then(() => res.send({ success: "New user created!", firstName: req.body.firstName, error: null })).catch((err) => console.log(err));
 
@@ -47,8 +48,45 @@ module.exports = () => {
   })
 
   router.get("/user", (req, res) => {
-    res.send(req.user)
+    if (req.user) res.send(req.user)
+    else res.status(400).send({ error: err, message: "No user currently logged in" })
   });
+
+  router.get("/security-questions/:email", (req, res) => {
+    User.findOne({ username: req.params.email }).exec((err, user) => {
+      if (!user) res.status(400).send({ error: err, message: "Email not found in database" })
+      else {
+        questions = user.securityQuestions.map((data) => {
+          return data.question
+        })
+
+        res.send({ questions: questions, userID: user.id })
+      }
+
+    })
+  })
+
+  router.post("/check-security-answers", (req, res) => {
+    User.findById(req.body.userID).exec((err, user) => {
+      if (!user) res.status(400).send({ error: err, message: "Email not found in database" })
+      else {
+        let questions = user.securityQuestions;
+        if (questions[0].answer === req.body.answers[0] && questions[1].answer === req.body.answers[1] && questions[2].answer === req.body.answers[2]) {
+          res.send(true);
+        } else {
+          res.send(false);
+        }
+      }
+    })
+  })
+
+  router.post('/reset-password', async (req, res) => {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    User.findByIdAndUpdate(req.body.userID, { password: hashedPassword }).exec((err, data) => {
+      if (!data) res.status(400).send({ error: err, message: "Unable to reset password" });
+      else res.send("password reset!")
+    })
+  })
 
   return router;
 }

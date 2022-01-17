@@ -17,6 +17,10 @@ let userSchema = mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    securityQuestions: {
+        type: Array,
+        required: true
     }
 });
 
