@@ -17,8 +17,6 @@ function Register(props) {
     const [securityQuestions, setSecurityQuestions] = useState(['Select Question', 'Select Question', 'Select Question']);
     const [securityQuestionAnswers, setSecurityQuestionAnswers] = useState(['', '', '']);
 
-    console.log(securityQuestions);
-
     let securityQuestionOptions = [
         'In what city were you born?',
         'What is the name of your favorite pet?',

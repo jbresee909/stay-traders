@@ -65,16 +65,51 @@ module.exports = () => {
             Like.find({ liked_or_disliked_by_userID: req.user.id }).exec((err, likedListings) => {
                 if (err) console.error(err);
                 else {
+                    // Get listings user has already liked to avoid duplicates
                     let likedListingIds = likedListings.map((like) => like.listingID)
-                    Listing.find({ deleted: false })
-                        .where("_id")
-                        .nin(likedListingIds)
+
+                    // Get User Ids of other users who liked liked current user's posts
+                    Like.find({ listing_user_id: req.user.id })
                         .where("userID")
                         .ne(req.user.id)
                         .limit(10)
-                        .exec((err, records) => {
-                            if (err) console.error(err);
-                            else res.json(records);
+                        .exec((error, likedByOthers) => {
+                            if (error) console.error(error)
+                            else {
+                                let likedByOthersUserIds = likedByOthers.map((like) => like.liked_or_disliked_by_userID)
+
+                                // Get listings that are from users that liked your listing(s)
+                                Listing.find({ deleted: false })
+                                    .where("userID")
+                                    .in(likedByOthersUserIds)
+                                    .where("userID")
+                                    .ne(req.user.id)
+                                    .where("_id")
+                                    .nin(likedListingIds)
+                                    .limit(10)
+                                    .exec((error, records) => {
+                                        let likedByOthersListingIds = records.map((listing) => String(listing._id))
+
+                                        if (error) console.error(error)
+                                        // Get other listings that you have not yet liked
+                                        Listing.find({ deleted: false })
+                                            .where("_id")
+                                            .nin(likedListingIds)
+                                            .where("_id")
+                                            .nin(likedByOthersListingIds)
+                                            .where("userID")
+                                            .ne(req.user.id)
+                                            .limit(10)
+                                            .exec((error1, records1) => {
+                                                let listings = [...new Set(records.concat(records1))];
+
+                                                console.log(listings.length);
+
+                                                if (error1) console.error(err);
+                                                else res.json(listings);
+                                            })
+                                    })
+                            }
                         })
                 }
             })
@@ -86,7 +121,6 @@ module.exports = () => {
                     else res.json(records);
                 })
         }
-
     })
 
     router.post('/post-like', (req, res) => {

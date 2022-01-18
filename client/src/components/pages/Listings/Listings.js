@@ -31,6 +31,8 @@ function AddNewListing(props) {
         try {
             const compressedFiles = []
             for (let i = 0; i < files.length; i++) {
+                if (i > 10) break; // Only allow a max of 10 files
+
                 compressedFiles.push(await imageCompression(files[i], options))
             }
 
@@ -44,6 +46,7 @@ function AddNewListing(props) {
 
     const previewFiles = (files) => {
         for (let i = 0; i < files.length; i++) {
+
             const reader = new FileReader();
             reader.readAsDataURL(files[i]);
             reader.onloadend = () => {

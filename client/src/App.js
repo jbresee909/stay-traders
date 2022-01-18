@@ -45,7 +45,7 @@ function App() {
           getUnreadMessageCount();
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.log("No User Logged In."))
 
   }, [currentUserFirstName, currentUserID])
 

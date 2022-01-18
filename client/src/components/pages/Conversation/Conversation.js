@@ -81,14 +81,14 @@ function Conversation(props) {
                     aria-describedby="inputGroup-sizing-default"
                 />
             </InputGroup>
-            <Button onClick={() => setShowListingInfo(!showListingInfo)}>Show Details</Button>
+            <Button onClick={() => setShowListingInfo(!showListingInfo)}>{showListingInfo ? "Hide Details" : "Show Details"}</Button>
             <div id="listing-info" style={showListingInfo ? { display: "" } : { display: "none" }}>
                 {listingsInfo.map((listing) => {
                     return (
                         <div className="listing-info-card">
                             <div className="listing-details">
                                 <h3>{listing.title}</h3>
-                                <p>{listing.description}</p>
+                                <p>{listing.city}, {listing.state}</p>
                             </div>
                             <div className="listing-thumbnail" style={{ backgroundImage: "url(" + listing.imageURLs[0] + ")" }}></div>
                         </div>

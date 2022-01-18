@@ -49,7 +49,7 @@ module.exports = () => {
 
   router.get("/user", (req, res) => {
     if (req.user) res.send(req.user)
-    else res.status(400).send({ error: err, message: "No user currently logged in" })
+    else res.status(404).send({ error: err, message: "No user currently logged in" })
   });
 
   router.get("/security-questions/:email", (req, res) => {
