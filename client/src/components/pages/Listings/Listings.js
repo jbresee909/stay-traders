@@ -90,7 +90,7 @@ function AddNewListing(props) {
         switch (step) {
             case 1:
                 return (
-                    <Form>
+                    <Form id="listing-image-selector">
                         <Carousel style={!previewSource[0] ? { display: "none" } : { display: "block" }}>
                             {previewSource.map((image, key) => {
                                 return (

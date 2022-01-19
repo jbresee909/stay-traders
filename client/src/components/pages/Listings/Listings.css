@@ -33,3 +33,12 @@
   background-color: #333;
   color: #fff
 }
+
+#listing-image-selector .carousel-control-next,
+#listing-image-selector .carousel-control-prev {
+   width: auto !important;
+}
+
+#listing-image-selector .sr-only {
+  display: none !important;
+}
