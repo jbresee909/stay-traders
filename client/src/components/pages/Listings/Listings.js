@@ -201,7 +201,6 @@ function Listings() {
     const getListings = () => {
         axios.get(process.env.REACT_APP_API + '/listings/users-listings', { withCredentials: true })
             .then((res) => {
-                console.log(res.data);
                 setListings(res.data)
             })
             .catch((err) => console.error(err))
@@ -225,6 +224,8 @@ function Listings() {
                         listingID={listing._id}
                         title={listing.title}
                         description={listing.description}
+                        city={listing.city}
+                        state={listing.state}
                         imageURLs={listing.imageURLs}
                         getListings={getListings} />
                 })}

@@ -14,7 +14,7 @@ function ListingCard(props) {
 
     const handleRemoveListing = (id) => {
         axios.post(process.env.REACT_APP_API + '/listings/delete', { id: id })
-            .then((res) => {
+            .then(() => {
                 props.getListings();
             })
             .catch((err) => console.error(err))
@@ -22,7 +22,7 @@ function ListingCard(props) {
 
     const handleEditListing = (id) => {
         axios.post(process.env.REACT_APP_API + '/listings/edit', { id: id, title: title, description: description })
-            .then((res) => {
+            .then(() => {
                 props.getListings();
                 handleCloseModal();
             })
@@ -37,7 +37,7 @@ function ListingCard(props) {
                 <Card.Body>
                     <Card.Title>{props.title}</Card.Title>
                     <Card.Text>
-                        {props.description}
+                        {props.city}, {props.state}
                     </Card.Text>
                     <div className="listing-dropdown">
                         <NavDropdown title="Edit" id="nav-dropdown">
