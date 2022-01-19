@@ -34,8 +34,8 @@
   color: #fff
 }
 
-#listing-image-selector .carousel-control-next,
-#listing-image-selector .carousel-control-prev {
+.carousel-control-next,
+.carousel-control-prev {
    width: auto !important;
 }
 
