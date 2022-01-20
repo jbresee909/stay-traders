@@ -8,16 +8,6 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require("passport");
-var ping = require('ping');
-
-// Ping server every 30 min to keep app alive
-setInterval(() => {
-  var host = 'www.staytraders.com'
-  ping.sys.probe(host, function (isAlive) {
-    var msg = isAlive ? 'host ' + host + ' is alive' : 'host ' + host + ' is dead';
-    console.log(msg);
-  });
-}, 10000);
 
 // connect to database
 const mongoose = require('mongoose');
