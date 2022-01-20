@@ -47,6 +47,13 @@ function App() {
       })
       .catch((err) => console.log("No User Logged In."))
 
+    // Ping server every 30 min to keep app alive
+    setInterval(() => {
+      axios.get(process.env.REACT_APP_API + '/users/keep-alive')
+        .then((res) => console.log(res))
+        .catch((err) => console.error(err))
+    }, 1800000);
+
   }, [currentUserFirstName, currentUserID])
 
   const getUnreadMessageCount = () => {

@@ -88,5 +88,9 @@ module.exports = () => {
     })
   })
 
+  router.get('/keep-alive', (req, res) => {
+    res.status(200).send('Stayin Alive!')
+  })
+
   return router;
 }
