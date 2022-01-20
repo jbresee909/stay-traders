@@ -103,8 +103,6 @@ module.exports = () => {
                                             .exec((error1, records1) => {
                                                 let listings = [...new Set(records.concat(records1))];
 
-                                                console.log(listings.length);
-
                                                 if (error1) console.error(err);
                                                 else res.json(listings);
                                             })

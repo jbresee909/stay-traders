@@ -2,6 +2,7 @@ module.exports = () => {
   const express = require("express");
   const router = express.Router();
   const User = require('../models/user');
+  const HelpRequest = require('../models/helpRequest');
   const bcrypt = require('bcrypt');
   const passport = require('passport');
 
@@ -49,7 +50,7 @@ module.exports = () => {
 
   router.get("/user", (req, res) => {
     if (req.user) res.send(req.user)
-    else res.status(404).send({ error: err, message: "No user currently logged in" })
+    else res.status(404).send({ message: "No user currently logged in" })
   });
 
   router.get("/security-questions/:email", (req, res) => {
@@ -86,6 +87,17 @@ module.exports = () => {
       if (!data) res.status(400).send({ error: err, message: "Unable to reset password" });
       else res.send("password reset!")
     })
+  })
+
+  router.post('/submit-help-request', (req, res) => {
+    const newHelpRequest = new HelpRequest({
+      email: req.body.email,
+      message: req.body.message,
+      is_resolved: false,
+      date_created: new Date()
+    })
+
+    newHelpRequest.save().then(() => res.send('request submitted!')).catch((err) => res.send(err))
   })
 
   return router;

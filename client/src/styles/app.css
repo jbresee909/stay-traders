@@ -34,6 +34,18 @@
   right: 0px !important;
 }
 
+#help-button {
+  position:fixed;
+  bottom: 18px;
+  right: 18px;
+  transform: scale(1)
+}
+
+#help-button:hover {
+  transform: scale(1.1);
+  transition: .5s;
+}
+
 
 @media only screen and (max-width: 992px) {
   #profile-pic {

@@ -6,7 +6,7 @@ import {
   Redirect
 } from "react-router-dom";
 import axios from 'axios';
-import { Navbar, Container, Image, NavDropdown, Nav } from "react-bootstrap"
+import { Navbar, Container, Image, NavDropdown, Nav, Modal, Button, InputGroup, FormControl, Alert } from "react-bootstrap"
 import "./styles/app.css";
 
 //Import Pages
@@ -17,6 +17,7 @@ import TermsOfService from './components/pages/Terms of Service/TermsOfService'
 import Listings from './components/pages/Listings/Listings'
 import Messages from './components/pages/Messages/Messages'
 import Conversation from './components/pages/Conversation/Conversation'
+import About from './components/pages/About/About';
 
 
 // Import Components
@@ -29,6 +30,13 @@ function App() {
   const [currentUserUsername, setCurrentUserUsername] = useState(null);
   const [currentUserID, setCurrentUserID] = useState(null);
   const [unreadMessageCount, setUnreadMessageCount] = useState(0);
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [helpRequestEmail, setHelpRequestEmail] = useState('');
+  const [helpRequestMessage, setHelpRequestMessage] = useState('');
+  const [helpRequestFeedback, setHelpRequestFeedback] = useState({ variant: 'success', message: '' })
+
+  const handleCloseHelpModal = () => setShowHelpModal(false);
+  const handleShowHelpModal = () => setShowHelpModal(true);
 
   useEffect(() => {
     // Get the user that is currently logged in    
@@ -58,10 +66,30 @@ function App() {
     }
   }
 
+  const submitHelpRequest = () => {
+    if (!helpRequestEmail.includes('@')) {
+      setHelpRequestFeedback({ variant: 'danger', message: 'Email not valid' })
+      return;
+    }
+
+    if (helpRequestMessage === '') {
+      setHelpRequestFeedback({ variant: 'danger', message: 'Please enter a message' })
+      return
+    }
+
+    axios.post(process.env.REACT_APP_API + '/users/submit-help-request', { email: helpRequestEmail, message: helpRequestMessage })
+      .then(() => setHelpRequestFeedback({ variant: 'success', message: 'Request Submitted!' }))
+      .catch((err) => console.error(err))
+  }
+
   return (
     <Router>
       <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
         <Container>
+          <img id='help-button'
+            src="https://img.icons8.com/color/64/000000/help--v1.png"
+            onClick={handleShowHelpModal}
+          />
           <Navbar.Brand href="/">Stay Traders</Navbar.Brand>
           <div>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" style={unreadMessageCount > 0 ? { position: "relative" } : { position: "inherit" }} />
@@ -85,6 +113,38 @@ function App() {
               <Image src="https://img.icons8.com/ios/50/000000/cat-profile.png" id="profile-pic" />
             </Nav>
           </Navbar.Collapse>
+          <Modal show={showHelpModal} onHide={handleCloseHelpModal} centered>
+            <Modal.Header closeButton>
+              <Modal.Title>Need Help?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Alert variant={helpRequestFeedback.variant} style={helpRequestFeedback.message === '' ? { display: 'none' } : { display: '' }}>
+                {helpRequestFeedback.message}
+              </Alert>
+              <InputGroup className="mb-3">
+                <FormControl
+                  placeholder="Email"
+                  aria-label="Enter Email"
+                  onChange={(e) => setHelpRequestEmail(e.target.value)}
+                />
+              </InputGroup>
+              <InputGroup>
+                <FormControl as="textarea"
+                  aria-label="Enter Help Request"
+                  placeholder="Type your question or request and we will get back to you soon."
+                  onChange={(e) => setHelpRequestMessage(e.target.value)}
+                />
+              </InputGroup>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseHelpModal}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={submitHelpRequest}>
+                Submit Request
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </Container>
       </Navbar>
       <div>
@@ -100,6 +160,9 @@ function App() {
           </Route>
           <Route path="/terms-of-service">
             <TermsOfService />
+          </Route>
+          <Route path="/about">
+            <About />
           </Route>
           <Route path="/listings">
             {!currentUserFirstName ? <Redirect to="/" /> : <Listings />}

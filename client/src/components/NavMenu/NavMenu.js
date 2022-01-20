@@ -63,7 +63,7 @@ function NavMenu(props) {
                 <Link to="/login"><NavDropdown.Item href="/login" className="nav-menu-link">Login</NavDropdown.Item> </Link>
                 <Link to="/register"><NavDropdown.Item href="/register">Register</NavDropdown.Item> </Link>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="#action5">About</NavDropdown.Item>
+                <Link to="/about"><NavDropdown.Item href="/about">About</NavDropdown.Item></Link>
             </>
         )
     }
