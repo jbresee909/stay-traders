@@ -40,9 +40,10 @@ module.exports = () => {
     })
 
     router.get('/users-listings', (req, res) => {
-        Listing.find({ userID: req.user.id, deleted: false }).exec((err, records) => {
+        Listing.find({ userID: req.user.id, deleted: false }).exec((err, listings) => {
+            if (!listings) res.status(400).send('no listings found')
             if (err) console.error(err)
-            res.send(records);
+            res.send(listings);
         })
     })
 

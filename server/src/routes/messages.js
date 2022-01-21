@@ -32,6 +32,7 @@ module.exports = () => {
         Conversation.find({ deleted: false, 'users.userID': req.user.id })
             .sort({ 'dateCreated': 'desc' })
             .exec((err, conversations) => {
+                if (!conversations) res.status(400).send('conversations not found')
                 if (err) console.error(err)
                 res.send(conversations)
             })
