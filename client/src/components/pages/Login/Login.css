@@ -1,5 +1,6 @@
 .secure-text input {
     -webkit-text-security: disc;
+    text-security: disc;
 }
 
 #login-form {
