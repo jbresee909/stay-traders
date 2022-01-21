@@ -171,7 +171,7 @@ function App() {
             {!currentUserFirstName ? <Redirect to="/" /> : <Messages />}
           </Route>
           <Route path="/conversations/:conversationID" >
-            {!currentUserFirstName ? <Redirect to="/" /> : <Conversation currentUserID={currentUserID} />}
+            {!currentUserFirstName ? <Redirect to="/" /> : <Conversation currentUserID={currentUserID} currentUserFirstName={currentUserFirstName} />}
           </Route>
           <Route path="/">
             {<Home currentUserFirstName={currentUserFirstName} setCurrentUserFirstName={setCurrentUserFirstName} />}

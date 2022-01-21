@@ -40,8 +40,8 @@ module.exports = () => {
     })
 
     router.get('/users-listings', (req, res) => {
+        if (!req.user) { res.send([]); return; }
         Listing.find({ userID: req.user.id, deleted: false }).exec((err, listings) => {
-            if (!listings) res.status(400).send('no listings found')
             if (err) console.error(err)
             res.send(listings);
         })
@@ -114,11 +114,8 @@ module.exports = () => {
             })
         }
         else {
-            Listing.find({ deleted: false })
-                .exec((err, records) => {
-                    if (err) console.error(err);
-                    else res.json(records);
-                })
+            res.send([]);
+            return
         }
     })
 

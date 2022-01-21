@@ -13,8 +13,9 @@ function NavMenu(props) {
 
     const handleLogout = () => {
         axios.post(process.env.REACT_APP_API + '/users/logout', { withCredentials: true })
-            .then((res) => {
+            .then(() => {
                 props.setCurrentUserFirstName(null)
+                window.location.reload();
             })
             .catch((err) => console.log(err))
     }

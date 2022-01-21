@@ -12,19 +12,19 @@ function Conversation(props) {
     let { conversationID } = useParams();
     const messagesEndRef = useRef(null)
 
-    console.log(listingsInfo)
-
     useEffect(() => {
-        getMessages();
+        checkForNewMessages();
         getListingsInfo();
-
-        // check for new messages every 5 seconds
-        setInterval(() => {
-            getMessages();
-        }, 5000);
-
     }, [])
 
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+
+    const checkForNewMessages = async () => {
+        while (props.currentUserFirstName) {
+            getMessages();
+            await delay(5000);
+        }
+    }
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })

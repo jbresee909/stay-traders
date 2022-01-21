@@ -6,9 +6,9 @@ module.exports = () => {
 
     // Routes
     router.get('/conversation/:conversationID', (req, res) => {
+        if (!req.user) { res.send([]); return; }
         // mark all messages from conversation as read if sent by a different user
         Conversation.findById(req.params.conversationID).exec((err, conversation) => {
-            if (!conversation) res.status(400).send('conversation not found')
             if (err) console.error(err)
             else {
                 let updatedMessages = conversation.messages;
@@ -29,10 +29,10 @@ module.exports = () => {
     })
 
     router.get('/conversations', (req, res) => {
+        if (!req.user) { res.send([]); return; }
         Conversation.find({ deleted: false, 'users.userID': req.user.id })
             .sort({ 'dateCreated': 'desc' })
             .exec((err, conversations) => {
-                if (!conversations) res.status(400).send('conversations not found')
                 if (err) console.error(err)
                 res.send(conversations)
             })
@@ -94,6 +94,7 @@ module.exports = () => {
 
     // GET all conversations that have unread messages
     router.get('/unread-message-count', (req, res) => {
+        if (!req.user) { res.send([]); return; }
         Conversation.find({ "messages.read": false })
             .exec((err, conversations) => {
                 if (err) console.error(err);

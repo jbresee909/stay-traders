@@ -50,7 +50,7 @@ module.exports = () => {
 
   router.get("/user", (req, res) => {
     if (req.user) res.send(req.user)
-    else res.status(400).send("No user currently logged in")
+    else res.send(null);
   });
 
   router.get("/security-questions/:email", (req, res) => {
