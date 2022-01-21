@@ -157,6 +157,7 @@ function Login(props) {
                         label="Email address"
                         className="mb-3"
                         onChange={(e) => setLoginUsername(e.target.value)}
+                        type="email"
                     >
                         <Form.Control type="email" placeholder="name@example.com" />
                     </FloatingLabel>
@@ -165,6 +166,8 @@ function Login(props) {
                         label="Password"
                         className="mb-3 secure-text"
                         onChange={(e) => setLoginPassword(e.target.value)}
+                        type="password"
+                        name="password"
                     >
                         <Form.Control type="password" placeholder="Password" />
                     </FloatingLabel>
