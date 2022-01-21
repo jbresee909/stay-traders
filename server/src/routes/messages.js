@@ -8,6 +8,7 @@ module.exports = () => {
     router.get('/conversation/:conversationID', (req, res) => {
         // mark all messages from conversation as read if sent by a different user
         Conversation.findById(req.params.conversationID).exec((err, conversation) => {
+            if (!conversation) res.status(400).send('conversation not found')
             if (err) console.error(err)
             else {
                 let updatedMessages = conversation.messages;
