@@ -84,12 +84,12 @@ function App() {
 
   return (
     <Router>
+      <img id='help-button'
+        src="https://img.icons8.com/color/64/000000/help--v1.png"
+        onClick={handleShowHelpModal}
+      />
       <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
         <Container>
-          <img id='help-button'
-            src="https://img.icons8.com/color/64/000000/help--v1.png"
-            onClick={handleShowHelpModal}
-          />
           <Navbar.Brand href="/">Stay Traders</Navbar.Brand>
           <div>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" style={unreadMessageCount > 0 ? { position: "relative" } : { position: "inherit" }} />
